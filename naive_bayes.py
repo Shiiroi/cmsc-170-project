@@ -1,6 +1,23 @@
+# naive_nayes.py - Gaussian Naive Bayes variant
+
+# Reference (structure adapted from, MIT License):
+#     D. Oniani, "ai" repository,
+#     https://github.com/oniani/ai/blob/main/model/ml/gaussian_naive_bayes.py
+
+# Our changes to the reference:
+#     1. Priors are computed once in fit() (the reference recomputes them for every row inside predict()).
+#     2. Variance smoothin is added once to the variances in fit() (the reference adds them inside the likelihood()).
+#     3. The log of the Gaussian is computed directly (the reference computes the Gaussian first, then takes its log, which can give log(0) = -inf).
+
+# Gaussian NB is the variant of Naive Bayes for continuous features.
+#     https://medium.com/data-science/gaussian-naive-bayes-explained-a-visual-guide-with-code-examples-for-beginners-04949cef383c
+
+# NB in the lab counts words, but since our features are percentages, we cannot
+# "count" it, so each feature in each class is modelled as a bell curve,
+# and its height at the value is used as P(x | class).
+
 import csv
 import numpy as np
-
 
 def fit(X, y, var_smoothing=1e-9):
     classes = np.unique(y)                              # [0,1,2] income_tiers
