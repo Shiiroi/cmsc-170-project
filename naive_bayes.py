@@ -39,6 +39,26 @@ def log_likelihood(x, mean, var):
     log_exponent = -((x-mean)**2) / (2 * var)
     return log_coeff + log_exponent
 
+def predict(X, classes, priors, means, variances):
+    predictions = []
+
+    for row in X:
+        scores = []
+        for i in range(len(classes)):
+            # score = log P(class) + sum of log P(feature | class)
+            log_prior = np.log(priors[i])
+
+            # naive assumption: each feature judged separately, the added up (independence)
+            log_likelihoods = log_likelihood(row, means[i], variances[i])
+            
+            # posterior: prior * likelihood
+            scores.append(log_prior + np.sum(log_likelihoods))
+
+        # Store the label with the largest posterior probability
+        predictions.append(classes[np.argmax(scores)])
+    
+    return np.array(predictions) 
+
 
 X = []   # features
 y = []   # labels: 0 = Low, 1 = Middle, 2 = High
@@ -83,3 +103,11 @@ print("food_home_pct mean per class:", means[:, 0].round(2))
 for c in classes:
     ll = log_likelihood(42.4, means[c, 0], variances[c, 0])
     print(f"class {c}: log-likelihood = {ll:.4f}   likelihood = {np.exp(ll):.5f}")
+
+# Test
+pred = predict(X_test, classes, priors, means, variances)
+
+correct = np.sum(pred == y_test)          
+accuracy = correct / len(y_test)
+print("Correct:", correct, "/", len(y_test))
+print("Accuracy:", round(float(accuracy), 4))
