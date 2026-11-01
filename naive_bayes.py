@@ -24,3 +24,11 @@ with open("table7_cleaned.csv", newline="", encoding="utf-8") as f:
 X = np.array(X)
 y = np.array(y)
 print("Data:", X.shape, "features:", len(features))
+
+# Test split
+split = 83 * 10
+X_train, y_train = X[:split], y[:split]
+X_test, y_test = X[split:], y[split:]
+
+print("Training rows:", len(X_train), "(83 areas)")
+print("Testing rows :", len(X_test), "(36 areas)")
