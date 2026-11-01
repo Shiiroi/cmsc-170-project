@@ -22,6 +22,24 @@ def fit(X, y, var_smoothing=1e-9):
     return classes, np.array(priors), np.array(means), np.array(variances)
 
 
+def log_likelihood(x, mean, var):
+    # Gaussian formula:  P(x|class) = coeff * exponent
+    #   coeff    = 1 / sqrt(2*pi*var)
+    #   exponent = exp(-(x - mean)^2 / (2*var))
+    # https://scikit-learn.org/stable/modules/naive_bayes.html#gaussian-naive-bayes
+
+    # note: here we return the LOG of P(x|class). Since log(a * b) = log(a) + log(b)
+    # the coeff * exponent in the formula becomes log_coeff + log_exponent.
+
+    # compared to the reference code, which computes the gaussian first and then
+    # takes its log (log(gaussian)), here we compute the log directly, so a tiny
+    # probability can never round down to 0 and give log(0) = -inf. results are same, just added extra precautions
+
+    log_coeff = -0.5 * np.log(2 * np.pi * var)
+    log_exponent = -((x-mean)**2) / (2 * var)
+    return log_coeff + log_exponent
+
+
 X = []   # features
 y = []   # labels: 0 = Low, 1 = Middle, 2 = High
 
@@ -60,3 +78,8 @@ classes, priors, means, variances = fit(X_train, y_train, var_smoothing=1e-9)
 print("Classes:", classes)
 print("Priors :", priors.round(4))
 print("food_home_pct mean per class:", means[:, 0].round(2))
+
+# Likelihood
+for c in classes:
+    ll = log_likelihood(42.4, means[c, 0], variances[c, 0])
+    print(f"class {c}: log-likelihood = {ll:.4f}   likelihood = {np.exp(ll):.5f}")
