@@ -3,11 +3,15 @@ import pandas as pd
 import math
 import collections
 import csv
+import os
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_PATH = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
 
 # W/ pandas already 
 #################################################
 def C45ImplementationWithPandas():
-    tablefile = pd.read_csv("../cmsc-170-project/table7_cleaned.csv")
+    tablefile = pd.read_csv(DATA_PATH)
 
     X = tablefile.drop(columns=["income_tier", "area_name"])
     y = tablefile["income_tier"]
@@ -19,7 +23,7 @@ def C45ImplementationWithPandas():
     model.summary()
 #################################################
 # No Pandas
-with open("../cmsc-170-project/table7_cleaned.csv", encoding="utf-8-sig", newline="") as f:
+with open(DATA_PATH, encoding="utf-8-sig", newline="") as f:
     reader = csv.DictReader(f)
     rows = []
     for r in reader:

@@ -67,7 +67,8 @@ def get_tier(decile):
 
 
 # find raw csv file
-raw_file = "Table 7. Total Annual Family Expenditure by Major Expenditure Group by Per Capita Income Decile and by Region, Province, and HUC- 2023.csv"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+raw_file = os.path.join(ROOT, "data", "raw", "table7_fies_2023.csv")
 
 # parse raw table
 areas = []
@@ -165,7 +166,7 @@ print(f"Class 2 (High-Income): {c2} ({c2/len(labels)*100:.1f}%)")
 print(f"Missing / NaN values: {'Yes' if has_nan else '0 (Clean)'}")
 
 # save cleaned csv
-out_file = "table7_cleaned.csv"
+out_file = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
 
 with open(out_file, "w", newline="", encoding="utf-8") as f:
     writer = csv.writer(f)

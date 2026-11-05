@@ -1,6 +1,7 @@
 import csv
 import numpy as np
 import random
+import os
 
 # minkowski formula
 def minkowski(training, testing, p):
@@ -27,7 +28,8 @@ def voting(labels):
     if l in winners:
       return l
 
-path = "table7_cleaned.csv"
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+path = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
 
 raw_data = []
 

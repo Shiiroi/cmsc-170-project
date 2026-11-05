@@ -18,6 +18,7 @@
 
 import csv
 import numpy as np
+import os
 
 def fit(X, y, var_smoothing=1e-9):
     classes = np.unique(y)                              # [0,1,2] income_tiers
@@ -76,11 +77,13 @@ def predict(X, classes, priors, means, variances):
     
     return np.array(predictions) 
 
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_PATH = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
 
 X = []   # features
 y = []   # labels: 0 = Low, 1 = Middle, 2 = High
 
-with open("table7_cleaned.csv", newline="", encoding="utf-8") as f:
+with open(DATA_PATH, newline="", encoding="utf-8") as f:
     reader = csv.DictReader(f)
 
     # features = every column ending in "_pct" (spending shares, %)
