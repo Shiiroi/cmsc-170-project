@@ -1,5 +1,5 @@
-from C45 import C45Classifier
-import pandas as pd
+# from C45 import C45Classifier
+# import pandas as pd
 import math
 import collections
 from data_utils import load_data, split_by_area, DATA_PATH
@@ -7,17 +7,17 @@ from metrics import print_results
 
 # W/ pandas already 
 #################################################
-def C45ImplementationWithPandas():
-    tablefile = pd.read_csv(DATA_PATH)
+# def C45ImplementationWithPandas():
+#     tablefile = pd.read_csv(DATA_PATH)
 
-    X = tablefile.drop(columns=["income_tier", "area_name"])
-    y = tablefile["income_tier"]
+#     X = tablefile.drop(columns=["income_tier", "area_name"])
+#     y = tablefile["income_tier"]
 
-    model = C45Classifier()
-    model.fit(X, y)
+#     model = C45Classifier()
+#     model.fit(X, y)
 
-    model.evaluate(X, y)
-    model.summary()
+#     model.evaluate(X, y)
+#     model.summary()
 #################################################
 # No Pandas
 X, y, areas, deciles, features = load_data()
@@ -113,10 +113,10 @@ def best_threshold(rows, attribute):
 
 # Just for testing C4.5 Tree w/o pandas Behavior
 def test():
-    print("C4.5 Decision Tree Implementation using pandas (as ideal result)")
-    C45ImplementationWithPandas()
+    # print("C4.5 Decision Tree Implementation using pandas (as ideal result)")
+    # C45ImplementationWithPandas()
 
-    print("\n")
+    # print("\n")
 
     print(f"Total number of records: {len(X)}")
     print(f"Training instances: {len(train_rows)}")
