@@ -16,8 +16,9 @@
 # "count" it, so each feature in each class is modelled as a bell curve,
 # and its height at the value is used as P(x | class).
 
-import csv
 import numpy as np
+from data_utils import load_data, split_by_area
+from metrics import print_results
 
 def fit(X, y, var_smoothing=1e-9):
     classes = np.unique(y)                              # [0,1,2] income_tiers
@@ -76,55 +77,28 @@ def predict(X, classes, priors, means, variances):
     
     return np.array(predictions) 
 
-
-X = []   # features
-y = []   # labels: 0 = Low, 1 = Middle, 2 = High
-
-with open("table7_cleaned.csv", newline="", encoding="utf-8") as f:
-    reader = csv.DictReader(f)
-
-    # features = every column ending in "_pct" (spending shares, %)
-    # area_name and decile are left out: decile is what the label(income_tiers) is made from
-    features = []
-    for c in reader.fieldnames:
-        if c.endswith("_pct"):
-            features.append(c)
-
-    for row in reader:
-        values = []
-        for c in features:
-            values.append(float(row[c]))
-        X.append(values)
-        y.append(int(row["income_tier"]))   #labels = income_tier
-
-X = np.array(X)
-y = np.array(y)
-print("Data:", X.shape, "features:", len(features))
+# Load data
+X, y, areas, deciles, features = load_data()
 
 # Test split
-split = 83 * 10
-X_train, y_train = X[:split], y[:split]
-X_test, y_test = X[split:], y[split:]
+train_idx, test_idx = split_by_area(areas)
 
-print("Training rows:", len(X_train), "(83 areas)")
-print("Testing rows :", len(X_test), "(36 areas)")
+X_train, y_train = X[train_idx], y[train_idx]
+X_test, y_test = X[test_idx], y[test_idx]
+deciles_test = [deciles[i] for i in test_idx]     # only for displaying results
+
+print(f"Total number of records: {len(X)}")
+print(f"Training instances: {len(X_train)}")
+print(f"Testing instances : {len(X_test)}")
 
 # Train
-classes, priors, means, variances = fit(X_train, y_train, var_smoothing=1e-9)
-
-print("Classes:", classes)
-print("Priors :", priors.round(4))
-print("food_home_pct mean per class:", means[:, 0].round(2))
-
-# Likelihood
-for c in classes:
-    ll = log_likelihood(42.4, means[c, 0], variances[c, 0])
-    print(f"class {c}: log-likelihood = {ll:.4f}   likelihood = {np.exp(ll):.5f}")
+var_smoothing = 1e-9
+classes, priors, means, variances = fit(X_train, y_train, var_smoothing)
 
 # Test
-pred = predict(X_test, classes, priors, means, variances)
+print("Classifying test instances...")
+print("GAUSSIAN NAIVE BAYES CLASSIFICATION RESULTS")
+print(f"var_smoothing = {var_smoothing}")
 
-correct = np.sum(pred == y_test)          
-accuracy = correct / len(y_test)
-print("Correct:", correct, "/", len(y_test))
-print("Accuracy:", round(float(accuracy), 4))
+pred = predict(X_test, classes, priors, means, variances)
+print_results(y_test, pred, deciles_test)
