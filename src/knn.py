@@ -1,7 +1,6 @@
-import csv
 import numpy as np
-import random
-import os
+from data_utils import load_data, split_by_area
+from metrics import print_results
 
 # minkowski formula
 def minkowski(training, testing, p):
@@ -28,37 +27,19 @@ def voting(labels):
     if l in winners:
       return l
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-path = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
+# Load data
+X, y, areas, deciles, features = load_data()
 
-raw_data = []
+# Test split
+train_idx, test_idx = split_by_area(areas)
 
-with open(path, "r", encoding="utf-8") as csvFile:
-  csvReader = csv.reader(csvFile)
-  col_names = next(csvReader)
-  for row in csvReader:
-    if not row:
-      continue
-    area = row[0]
-    decile = int(row[1])
-    # 10 expenditure percentage features (cols 2 to 11)
-    data = [float(row[i]) for i in range(2, 12)]
-    convertedArray = np.array(data)
-    # income_tier (0: Low-Income, 1: Middle-Income, 2: High-Income)
-    income_tier = int(row[12])
-    raw_data.append((convertedArray, income_tier, area, decile))
+X_train, y_train = X[train_idx], y[train_idx]
+X_test, y_test = X[test_idx], y[test_idx]
+deciles_test = [deciles[i] for i in test_idx]   # only for displaying results
 
-
-# 83 places traning 36 places testing (TODO: UPDATE TO RANDOMIZED?)
-train_set =  830 
-test_set =  360
-
-training_data = raw_data[:train_set]
-testing_data = raw_data[train_set:train_set + test_set]
-
-print(f"Total number of records: {len(raw_data)}")
-print(f"Training instances: {len(training_data)}")
-print(f"Testing instances :{len(testing_data)}")
+print(f"Total number of records: {len(X)}")
+print(f"Training instances: {len(X_train)}")
+print(f"Testing instances :{len(X_test)}")
 
 # get input k and p
 isOdd = False
@@ -81,9 +62,9 @@ print(f"k = {k}")
 print(f"p = {p}")
 
 predictions = []
-for (d, w, a, dec) in testing_data:
+for d in X_test:
   distances = []
-  for (dt, wt, at, dect) in training_data:
+  for dt,wt in zip(X_train, y_train):
     dist = minkowski(dt, d, p)
     distances.append((dist, wt))
 
@@ -102,31 +83,4 @@ for (d, w, a, dec) in testing_data:
   prediction = voting(pred)
   predictions.append(prediction)
 
-# count correct
-correct = 0
-incorrect = []
-incorrect_info = []
-
-for i in range(len(testing_data)):
-  if predictions[i] == testing_data[i][1]:
-    correct += 1
-  else:
-    incorrect.append((testing_data[i][1], predictions[i]))
-    incorrect_info.append((i + 1, testing_data[i][3]))
-
-# accuracy
-accuracy = correct / len(testing_data)
-print(f"Correct predictions: {correct}")
-print(f"Incorrect predictions: {len(incorrect)}")
-print(f"Classification Accuracy: {accuracy*100:.2f}%")
-
-print("Data Record #\t\t Decile \t Actual \t Predicted")
-
-# map class numbers to the income tier 
-tier_names = {0: "Low-Income", 1: "Middle-Income", 2: "High-Income"}
-
-curr_idx = 0
-for (a, p_val) in incorrect:
-  rec_num, dec_val = incorrect_info[curr_idx]
-  print(f"{rec_num}\t{dec_val}\t{tier_names[a]}\t{tier_names[p_val]}")
-  curr_idx += 1
+print_results(y_test, predictions, deciles_test)
