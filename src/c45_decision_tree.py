@@ -2,11 +2,8 @@ from C45 import C45Classifier
 import pandas as pd
 import math
 import collections
-import csv
-import os
-
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DATA_PATH = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
+from data_utils import load_data, split_by_area, DATA_PATH
+from metrics import print_results
 
 # W/ pandas already 
 #################################################
@@ -23,26 +20,30 @@ def C45ImplementationWithPandas():
     model.summary()
 #################################################
 # No Pandas
-with open(DATA_PATH, encoding="utf-8-sig", newline="") as f:
-    reader = csv.DictReader(f)
-    rows = []
-    for r in reader:
-        row = {}
-        for k, v in r.items():
-            if k in ("area_name",):
-                row[k] = v
-            elif k == "income_tier":
-                row[k] = int(v)
-            else:
-                row[k] = float(v)
-        rows.append(row)
+X, y, areas, deciles, features = load_data()
+train_idx, test_idx = split_by_area(areas)
 
-ATTRIBUTES = ["food_home_pct", "food_outside_pct", "housing_utilities_pct",
-            "transport_pct", "infocomm_pct", "education_pct", "health_pct",
-            "clothing_pct", "recreation_pct", "occasions_pct"]
+ATTRIBUTES = features
 
-X = [{f: r[a] for a in ATTRIBUTES} for r in rows]
-y = [r["income_tier"] for r in rows]
+def row_to_dict(values):
+    row = {}
+    for j in range(len(features)):
+        row[features[j]] = values[j]
+    return row
+
+train_rows = []
+for i in train_idx:
+    row = row_to_dict(X[i])
+    row["income_tier"] = y[i]
+    train_rows.append(row)
+
+test_rows = []
+y_test = []          
+deciles_test = []    # only for displaying results
+for i in test_idx:
+    test_rows.append(row_to_dict(X[i]))
+    y_test.append(y[i])
+    deciles_test.append(deciles[i])
 
 class C45DecisionTree:
     def __init__(self, min_samples, max_depth):
@@ -61,7 +62,7 @@ class C45DecisionTree:
         if not attributes or depth >= self.max_depth or len(rows) < self.min_samples:
             return ("leaf", collections.Counter(labels).most_common(1)[0][0])
         best = (None, None, -1.0)
-        for a in attributes:
+        for f in attributes:
             t, ratio = best_threshold(rows, f)
             if ratio > best[2]:
                 best = (f, t, ratio)
@@ -117,14 +118,23 @@ def test():
 
     print("\n")
 
-    print("C4.5 Decision Tree Implementation")
-    model = C45DecisionTree(min_samples=10, max_depth=math.log2(len(ATTRIBUTES)))
-    model.fit(rows)
+    print(f"Total number of records: {len(X)}")
+    print(f"Training instances: {len(train_rows)}")
+    print(f"Testing instances : {len(test_rows)}")
 
-    predictions = model.predict(X)
+    min_samples = 10
+    max_depth = math.log2(len(ATTRIBUTES))
 
-    accuracy = sum( p == t for p, t in zip(predictions, y)) / len(y)
-    print(f"Accuracy: {accuracy:.3f}")
+    print("Classifying test instances...")
+    print("C4.5 DECISION TREE CLASSIFICATION RESULTS")
+    print(f"min_samples = {min_samples}")
+    print(f"max_depth = {max_depth}")
+
+    model = C45DecisionTree(min_samples=min_samples, max_depth=max_depth)
+    model.fit(train_rows)
+
+    predictions = model.predict(test_rows)
+    print_results(y_test, predictions, deciles_test)
 
     # print(model.tree)
 
