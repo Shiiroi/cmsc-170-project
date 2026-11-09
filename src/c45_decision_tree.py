@@ -123,7 +123,8 @@ def test():
     print(f"Testing instances : {len(test_rows)}")
 
     min_samples = 10
-    max_depth = math.log2(len(ATTRIBUTES))
+    # max_depth = math.log2(len(ATTRIBUTES))
+    max_depth = 10
 
     print("Classifying test instances...")
     print("C4.5 DECISION TREE CLASSIFICATION RESULTS")
