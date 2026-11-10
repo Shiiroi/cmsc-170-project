@@ -39,6 +39,8 @@ def is_regional_or_national(area):
         return True
     if "BANGSAMORO" in clean:
         return True
+    if clean == "MAGUINDANAO":
+        return True
     return False
 
 
