@@ -27,21 +27,24 @@ def print_results(actual, predicted, deciles):
     for rec_num, decile, a, p in incorrect:
         print(f"{rec_num:<15}{decile:<8}{TIER_NAMES[a]:<16}{TIER_NAMES[p]}")
 
-    # calculate precision and recall metrics
+    # calculate precision, recall, f1 metrics
     precision = get_precision(actual, predicted)
     recall = get_recall(actual, predicted)
+    f1 = get_f1_score(precision, recall)
     counts = get_income_counts(actual)
 
+    # calculate weighted means of each metric
     weighted_precision = get_weighted_mean(precision, counts)
     weighted_recall = get_weighted_mean(recall, counts)
+    weighted_f1 = get_weighted_mean(f1, counts)
 
     # display precision and recall table
-    print(f"{'Income Tier':<16}{'Precision':<12}{'Recall':<12}")
+    print(f"{'Income Tier':<16}{'Precision':<12}{'Recall':<12}{'F1':<12}")
     for class_idx in TIER_NAMES:
         tier = TIER_NAMES[class_idx]
-        print(f"{tier:<16}{precision[tier]:<12.4f}{recall[tier]:<12.4f}")
+        print(f"{tier:<16}{precision[tier]:<12.4f}{recall[tier]:<12.4f}{f1[tier]:<12.4f}")
 
-    print(f"{'Weighted Mean':<16}{weighted_precision:<12.4f}{weighted_recall:<12.4f}")
+    print(f"{'Weighted Mean':<16}{weighted_precision:<12.4f}{weighted_recall:<12.4f}{weighted_f1:<12.4f}")
 
 
 # formulas (precision recall f1) used are based from:
@@ -119,3 +122,16 @@ def get_weighted_mean(scores, counts):
 
     weighted_sum = sum(scores[tier] * counts[tier] for tier in scores)
     return weighted_sum / float(total)
+
+# f1 raw score: 2*((precision*recall)/(precision+recall))
+def get_f1_score(precision_dict, recall_dict):
+    f1_dict = {}
+    for class_name in TIER_NAMES.values():
+        p = precision_dict[class_name]
+        r = recall_dict[class_name]
+
+        if (p + r) > 0:
+            f1_dict[class_name] = 2.0 * ((p * r ) / (p + r))
+        else:
+            f1_dict[class_name] = 0.0
+    return f1_dict
