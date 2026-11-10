@@ -77,28 +77,37 @@ def predict(X, classes, priors, means, variances):
     
     return np.array(predictions) 
 
-# Load data
-X, y, areas, deciles, features = load_data()
+def train_nb(X_train, y_train, var_smoothing=1e-9):
+    classes, priors, means, variances = fit(X_train, y_train, var_smoothing)
+    return {"classes": classes, "priors": priors, "means": means, "variances": variances, "var_smoothing": var_smoothing}
 
-# Test split
-train_idx, test_idx = split_by_area(areas)
+def predict_nb(model, X_test):
+    return predict(X_test, model["classes"], model["priors"], model["means"], model["variances"])
 
-X_train, y_train = X[train_idx], y[train_idx]
-X_test, y_test = X[test_idx], y[test_idx]
-deciles_test = [deciles[i] for i in test_idx]     # only for displaying results
 
-print(f"Total number of records: {len(X)}")
-print(f"Training instances: {len(X_train)}")
-print(f"Testing instances : {len(X_test)}")
+if __name__=="__main__":
+    # Load data
+    X, y, areas, deciles, features = load_data()
 
-# Train
-var_smoothing = 1e-9
-classes, priors, means, variances = fit(X_train, y_train, var_smoothing)
+    # Test split
+    train_idx, test_idx = split_by_area(areas)
 
-# Test
-print("Classifying test instances...")
-print("GAUSSIAN NAIVE BAYES CLASSIFICATION RESULTS")
-print(f"var_smoothing = {var_smoothing}")
+    X_train, y_train = X[train_idx], y[train_idx]
+    X_test, y_test = X[test_idx], y[test_idx]
+    deciles_test = [deciles[i] for i in test_idx]     # only for displaying results
 
-pred = predict(X_test, classes, priors, means, variances)
-print_results(y_test, pred, deciles_test)
+    print(f"Total number of records: {len(X)}")
+    print(f"Training instances: {len(X_train)}")
+    print(f"Testing instances : {len(X_test)}")
+
+    # Train
+    var_smoothing = 1e-9
+    classes, priors, means, variances = fit(X_train, y_train, var_smoothing)
+
+    # Test
+    print("Classifying test instances...")
+    print("GAUSSIAN NAIVE BAYES CLASSIFICATION RESULTS")
+    print(f"var_smoothing = {var_smoothing}")
+
+    pred = predict(X_test, classes, priors, means, variances)
+    print_results(y_test, pred, deciles_test)
