@@ -2,6 +2,7 @@ from data_utils import load_data, split_by_area
 from metrics import (accuracy_metric, get_precision, get_recall, get_weighted_mean, get_f1_score, get_income_counts)
 from naive_bayes import train_nb, predict_nb
 from knn import train_knn, predict_knn
+from c45_decision_tree import train_dt, predict_dt
 
 # ================= Load, Split ===================
 X, y, areas, deciles, features = load_data()
@@ -28,6 +29,8 @@ model = train_knn(X_train, y_train, k=5, p=2)
 predictions["KNN (k=5, p=2)"] = predict_knn(model, X_test)
 
 # DT
+model = train_dt(X_train, y_train, features, min_samples=10, max_depth=10)
+predictions["C4.5 Decision Tree"] = predict_dt(model, X_test)
 
 # ================= Evaluate, Compare ===================
 counts = get_income_counts(y_test)

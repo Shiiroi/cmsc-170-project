@@ -20,30 +20,38 @@ from metrics import print_results
 #     model.summary()
 #################################################
 # No Pandas
-X, y, areas, deciles, features = load_data()
-train_idx, test_idx = split_by_area(areas)
+ATTRIBUTES = []
 
-ATTRIBUTES = features
-
-def row_to_dict(values):
+def row_to_dict(values, features):
+    # [42.4, 17.9, ...] -> {"food_home_pct": 42.4, "food_outside_pct": 17.9, ...}
     row = {}
     for j in range(len(features)):
         row[features[j]] = values[j]
     return row
 
-train_rows = []
-for i in train_idx:
-    row = row_to_dict(X[i])
-    row["income_tier"] = y[i]
-    train_rows.append(row)
 
-test_rows = []
-y_test = []          
-deciles_test = []    # only for displaying results
-for i in test_idx:
-    test_rows.append(row_to_dict(X[i]))
-    y_test.append(y[i])
-    deciles_test.append(deciles[i])
+def train_dt(X_train, y_train, features, min_samples=10, max_depth=10):
+    global ATTRIBUTES
+    ATTRIBUTES = features
+
+    train_rows = []
+    for i in range(len(X_train)):
+        row = row_to_dict(X_train[i], features)
+        row["income_tier"] = y_train[i]
+        train_rows.append(row)
+
+    tree = C45DecisionTree(min_samples=min_samples, max_depth=max_depth)
+    tree.fit(train_rows)
+    return {"tree": tree, "features": features,
+            "min_samples": min_samples, "max_depth": max_depth}
+
+
+def predict_dt(model, X_test):
+    test_rows = []
+    for values in X_test:
+        test_rows.append(row_to_dict(values, model["features"]))
+    return model["tree"].predict(test_rows)
+
 
 class C45DecisionTree:
     def __init__(self, min_samples, max_depth):
@@ -117,10 +125,16 @@ def test():
     # C45ImplementationWithPandas()
 
     # print("\n")
+    X, y, areas, deciles, features = load_data()
+    train_idx, test_idx = split_by_area(areas)
+
+    X_train, y_train = X[train_idx], y[train_idx]
+    X_test, y_test = X[test_idx], y[test_idx]
+    deciles_test = [deciles[i] for i in test_idx]    # only for displaying results
 
     print(f"Total number of records: {len(X)}")
-    print(f"Training instances: {len(train_rows)}")
-    print(f"Testing instances : {len(test_rows)}")
+    print(f"Training instances: {len(X_train)}")
+    print(f"Testing instances : {len(X_test)}")
 
     min_samples = 10
     # max_depth = math.log2(len(ATTRIBUTES))
@@ -131,12 +145,13 @@ def test():
     print(f"min_samples = {min_samples}")
     print(f"max_depth = {max_depth}")
 
-    model = C45DecisionTree(min_samples=min_samples, max_depth=max_depth)
-    model.fit(train_rows)
+    model = train_dt(X_train, y_train, features, min_samples, max_depth)
+    predictions = predict_dt(model, X_test)
 
-    predictions = model.predict(test_rows)
     print_results(y_test, predictions, deciles_test)
 
     # print(model.tree)
 
-test()
+if __name__ == "__main__":
+    test()
+
