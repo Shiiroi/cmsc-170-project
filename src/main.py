@@ -1,7 +1,7 @@
 from data_utils import load_data, split_by_area
 from metrics import (accuracy_metric, get_precision, get_recall, get_weighted_mean, get_f1_score, get_income_counts)
 from naive_bayes import train_nb, predict_nb
-
+from knn import train_knn, predict_knn
 
 # ================= Load, Split ===================
 X, y, areas, deciles, features = load_data()
@@ -24,6 +24,8 @@ model = train_nb(X_train, y_train, var_smoothing=1e-9)
 predictions["Gaussian Naive Bayes"] = predict_nb(model, X_test)
 
 # KNN
+model = train_knn(X_train, y_train, k=5, p=2)
+predictions["KNN (k=5, p=2)"] = predict_knn(model, X_test)
 
 # DT
 
