@@ -27,60 +27,92 @@ def voting(labels):
     if l in winners:
       return l
 
-# Load data
-X, y, areas, deciles, features = load_data()
+def train_knn(X_train, y_train, k=5, p=2):
+  return {"X": X_train, "y": y_train, "k": k, "p": p}
 
-# Test split
-train_idx, test_idx = split_by_area(areas)
+def predict_knn(model, X_test):
+  k = model["k"]
+  p = model["p"]
 
-X_train, y_train = X[train_idx], y[train_idx]
-X_test, y_test = X[test_idx], y[test_idx]
-deciles_test = [deciles[i] for i in test_idx]   # only for displaying results
+  predictions = []
+  for d in X_test:
+    distances = []
+    for dt,wt in zip(model["X"], model["y"]):
+      dist = minkowski(dt, d, p)
+      distances.append((dist, wt))
 
-print(f"Total number of records: {len(X)}")
-print(f"Training instances: {len(X_train)}")
-print(f"Testing instances :{len(X_test)}")
+    distances = sorted(
+        distances,
+        key=lambda x: x[0],
+        # reverse=True
+    )
 
-# get input k and p
-isOdd = False
-isPos = False
-k=0
-p=0
-while (not isOdd):
-  k = int(input("Enter an odd value of k:"))
-  if k > 0 and k % 2 != 0:
-    isOdd = True
+    topk = distances[:k]
 
-while (not isPos):
-  p = float(input("Enter the value of p for Minkowski distance: "))
-  if p > 0:
-    isPos = True
+    pred = []
+    for (dp, wp) in topk:
+      pred.append(wp)
 
-print("Classifying test instances...")
-print("KNN CLASSIFICATION RESULTS")
-print(f"k = {k}")
-print(f"p = {p}")
+    prediction = voting(pred)
+    predictions.append(prediction)
+  return predictions
 
-predictions = []
-for d in X_test:
-  distances = []
-  for dt,wt in zip(X_train, y_train):
-    dist = minkowski(dt, d, p)
-    distances.append((dist, wt))
 
-  distances = sorted(
-      distances,
-      key=lambda x: x[0],
-      # reverse=True
-  )
+if __name__=="__main__":
+  # Load data
+  X, y, areas, deciles, features = load_data()
 
-  topk = distances[:k]
+  # Test split
+  train_idx, test_idx = split_by_area(areas)
 
-  pred = []
-  for (dp, wp) in topk:
-    pred.append(wp)
+  X_train, y_train = X[train_idx], y[train_idx]
+  X_test, y_test = X[test_idx], y[test_idx]
+  deciles_test = [deciles[i] for i in test_idx]   # only for displaying results
 
-  prediction = voting(pred)
-  predictions.append(prediction)
+  print(f"Total number of records: {len(X)}")
+  print(f"Training instances: {len(X_train)}")
+  print(f"Testing instances :{len(X_test)}")
 
-print_results(y_test, predictions, deciles_test)
+  # get input k and p
+  isOdd = False
+  isPos = False
+  k=0
+  p=0
+  while (not isOdd):
+    k = int(input("Enter an odd value of k:"))
+    if k > 0 and k % 2 != 0:
+      isOdd = True
+
+  while (not isPos):
+    p = float(input("Enter the value of p for Minkowski distance: "))
+    if p > 0:
+      isPos = True
+
+  print("Classifying test instances...")
+  print("KNN CLASSIFICATION RESULTS")
+  print(f"k = {k}")
+  print(f"p = {p}")
+
+  predictions = []
+  for d in X_test:
+    distances = []
+    for dt,wt in zip(X_train, y_train):
+      dist = minkowski(dt, d, p)
+      distances.append((dist, wt))
+
+    distances = sorted(
+        distances,
+        key=lambda x: x[0],
+        # reverse=True
+    )
+
+    topk = distances[:k]
+
+    pred = []
+    for (dp, wp) in topk:
+      pred.append(wp)
+
+    prediction = voting(pred)
+    predictions.append(prediction)
+
+  print_results(y_test, predictions, deciles_test)
