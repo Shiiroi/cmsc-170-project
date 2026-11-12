@@ -1,6 +1,7 @@
 import csv
 import os
 import numpy as np
+import random
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_PATH = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
@@ -28,16 +29,20 @@ def load_data(path=DATA_PATH):
     
     return np.array(X), np.array(y), areas, deciles, features
 
-def split_by_area(areas, n_train_areas=83):
+def split_by_area(areas, test_ratio=0.3, seed=42):
     # Returns:
     #   train_idx   row indices of train rows 
     #   test_idx    row indices of test rows
 
     # **note:   test split for now is first 83(train data), remaining 36(test) [todo: randomize later]
 
-    unique_areas = list(dict.fromkeys(areas))
-    train_areas = set(unique_areas[:n_train_areas])
+    unique_areas = sorted(set(areas))
+    rng = random.Random(seed)
+    rng.shuffle(unique_areas)
 
-    train_idx = [i for i, a in enumerate(areas) if a in train_areas]
-    test_idx = [i for i, a in enumerate(areas) if a not in train_areas]
+    n_test = round(len(unique_areas)*test_ratio)
+    test_areas = set(unique_areas[:n_test])
+
+    train_idx = [i for i, a in enumerate(areas) if a not in test_areas]
+    test_idx = [i for i, a in enumerate(areas) if a in test_areas]
     return np.array(train_idx), np.array(test_idx)    
