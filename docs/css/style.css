@@ -1,0 +1,15 @@
+body {
+  font-family: sans-serif;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 0 16px;
+  line-height: 1.6;
+}
+
+.site-nav a {
+  margin-right: 16px;
+}
+
+.site-nav a.active {
+  font-weight: bold;
+}
