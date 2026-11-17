@@ -46,3 +46,24 @@ def split_by_area(areas, test_ratio=0.3, seed=42):
     train_idx = [i for i, a in enumerate(areas) if a not in test_areas]
     test_idx = [i for i, a in enumerate(areas) if a in test_areas]
     return np.array(train_idx), np.array(test_idx)    
+
+def split_data_set(dataset, test_ratio=0.3, seed=42):
+    train_idx, test_idx = split_by_area(dataset["areas"], test_ratio, seed)
+
+    train_set = {
+        "X": dataset["X"][train_idx],
+        "y": dataset["y"][train_idx],
+        "areas": [dataset["areas"][i] for i in train_idx],
+        "deciles": [dataset["deciles"][i] for i in train_idx],
+        "features": dataset["features"],
+    }
+
+    test_set = {
+        "X": dataset["X"][test_idx],
+        "y": dataset["y"][test_idx],
+        "areas": [dataset["areas"][i] for i in test_idx],
+        "deciles": [dataset["deciles"][i] for i in test_idx],
+        "features": dataset["features"],
+    }
+
+    return train_set, test_set
