@@ -1,9 +1,14 @@
 import csv
 import os
 import re
+import numpy as np
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+RAW_PATH = os.path.join(ROOT, "data", "raw", "table7_fies_2023.csv")
+PROCESSED_PATH = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
 
 # 10 core expenditure features
-features = [
+FEATURES = [
     ("food_home_pct", "food consumed at home"),
     ("food_outside_pct", "food regularly consumed outside the home"),
     ("housing_utilities_pct", "housing, water, electricity, gas and other fuels"),
@@ -16,8 +21,56 @@ features = [
     ("occasions_pct", "special family occasion"),
 ]
 
-cat_map = {clean_name: col for col, clean_name in features}
 
+# -------------------------------------------------------------------
+# DATA COLLECTION: read the raw PSA table
+# -------------------------------------------------------------------
+
+def data_collection(path=RAW_PATH):
+    raw_rows = []
+
+    with open(path, "r", encoding="utf-8", errors="replace") as f:
+        reader = csv.reader(f)
+        header = None
+        deciles = {}
+        area_idx = 0
+        cat_idx = 1
+
+        for row in reader:
+            if not row or not any(row):
+                continue
+
+            # find header row with 10 deciles
+            if header is None:
+                found = {}
+                for i, c in enumerate(row):
+                    m = re.search(r"^(\d+)(?:st|nd|rd|th)?\s+decile$", c.strip(), re.IGNORECASE)
+                    if m:
+                        found[int(m.group(1))] = i
+                if len(found) >= 10:
+                    header = row
+                    deciles = found
+                    for i, c in enumerate(row):
+                        cl = c.strip().lower()
+                        if "region" in cl or "province" in cl or "huc" in cl:
+                            area_idx = i
+                        elif "expenditure" in cl and "all income" not in cl:
+                            cat_idx = i
+
+                continue
+
+            # extract values per decile
+            values = []
+            for d in range(1, 11):
+                values.append(row[deciles[d]])
+            raw_rows.append((row[area_idx].strip(), row[cat_idx].strip(), values))
+    
+    return raw_rows
+
+
+# -------------------------------------------------------------------
+# DATA CLEANING: remove aggregate rows, clean names
+# -------------------------------------------------------------------
 
 # check if national or regional aggregate
 def is_regional_or_national(area):
@@ -58,6 +111,21 @@ def clean_cat(name):
     return name.lstrip(".").strip().lower()
 
 
+def data_cleaning(raw_rows):
+    cleaned_rows = []
+    for raw_area, raw_cat, values in raw_rows:
+        # filter national and regional aggregates
+        if is_regional_or_national(raw_area):
+            continue
+        cleaned_rows.append((clean_area(raw_area), clean_cat(raw_cat), values))
+    
+    return cleaned_rows
+
+
+# -------------------------------------------------------------------
+# DATA PREPROCESSING: select features, reshape, make labels, save
+# -------------------------------------------------------------------
+
 # map decile to income tier (0: low, 1: mid, 2: high)
 def get_tier(decile):
     if decile <= 3:
@@ -68,117 +136,76 @@ def get_tier(decile):
         return 2
 
 
-# find raw csv file
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-raw_file = os.path.join(ROOT, "data", "raw", "table7_fies_2023.csv")
+def data_preprocessing(cleaned_rows, save_path=PROCESSED_PATH):
+    cat_map = {cat: col for col, cat in FEATURES}
+    feature_names = [col for col, _ in FEATURES]
 
-# parse raw table
-areas = []
-data = {}
-
-with open(raw_file, "r", encoding="utf-8", errors="replace") as f:
-    reader = csv.reader(f)
-    header = None
-    deciles = {}
-    area_idx = 0
-    cat_idx = 1
-
-    for row in reader:
-        if not row or not any(row):
-            continue
-
-        # find header row with 10 deciles
-        if header is None:
-            found = {}
-            for i, c in enumerate(row):
-                m = re.search(r"^(\d+)(?:st|nd|rd|th)?\s+decile$", c.strip(), re.IGNORECASE)
-                if m:
-                    found[int(m.group(1))] = i
-            if len(found) >= 10:
-                header = row
-                deciles = found
-                for i, c in enumerate(row):
-                    cl = c.strip().lower()
-                    if "region" in cl or "province" in cl or "huc" in cl:
-                        area_idx = i
-                    elif "expenditure" in cl and "all income" not in cl:
-                        cat_idx = i
-                continue
-            else:
-                continue
-
-        raw_area = row[area_idx].strip()
-        raw_cat = row[cat_idx].strip()
-
-        # filter national and regional aggregates
-        if is_regional_or_national(raw_area):
-            continue
-
+    # select the feature categories: data[area][decile][feature] = value
+    areas = []
+    data = {}
+    for area, cat, values in cleaned_rows:
         # match 10 core features
-        norm_cat = clean_cat(raw_cat)
-        if norm_cat not in cat_map:
+        if cat not in cat_map:
             continue
 
-        feat_col = cat_map[norm_cat]
-        c_area = clean_area(raw_area)
-
-        if c_area not in data:
-            areas.append(c_area)
-            data[c_area] = {d: {} for d in range(1, 11)}
-
+        if area not in data:
+            areas.append(area)
+            data[area] = {d: {} for d in range(1, 11)}
+        
         # extract values per decile
         for d in range(1, 11):
-            val = float(row[deciles[d]].strip())
-            data[c_area][d][feat_col] = val
+            data[area][d][cat_map[cat]] = float(values[d-1].strip())
+    
+    # unpivot deciles into rows
+    out_header = ["area_name", "decile"] + feature_names + ["income_tier"]
+    out_rows = []
 
-# unpivot deciles into rows
-out_header = ["area_name", "decile"] + [col for col, _ in features] + ["income_tier"]
-out_rows = []
+    for area in areas:
+        for d in range(1, 11):
+            tier = get_tier(d)
+            r = [area, d]
+            for col in feature_names:
+                r.append(data[area][d][col])
+            r.append(tier)
+            out_rows.append(r)
 
-for area in areas:
-    for d in range(1, 11):
-        tier = get_tier(d)
-        r = [area, d]
-        for col, _ in features:
-            r.append(data[area][d][col])
-        r.append(tier)
-        out_rows.append(r)
+    # save the processed dataset
+    with open(save_path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.writer(f)
+        writer.writerow(out_header)
+        for r in out_rows:
+            formatted_row = [r[0], r[1]]
+            for val in r[2:12]:
+                formatted_row.append(f"{val:.2f}")
+            formatted_row.append(r[12])
+            writer.writerow(formatted_row)
+    
+    # dataset for the next pipeline step
+    X = [r[2:12] for r in out_rows]
+    y = [r[12] for r in out_rows]
+    row_areas = [r[0] for r in out_rows]
+    row_deciles = [r[1] for r in out_rows]
 
-# validation checks and summary
-labels = [r[-1] for r in out_rows]
-c0 = labels.count(0)
-c1 = labels.count(1)
-c2 = labels.count(2)
+    return {"X": np.array(X), "y": np.array(y), "areas": row_areas,
+            "deciles": row_deciles, "features": feature_names}
 
-# none value check
-has_nan = False
-for r in out_rows:
-    for val in r[2:12]:
-        if val is None:
-            has_nan = True
-            break
-    if has_nan:
-        break
 
-print(f"Total rows: {len(out_rows)}")
-print(f"Total unique areas: {len(areas)}")
-print(f"Class 0 (Low-Income): {c0} ({c0/len(labels)*100:.1f}%)")
-print(f"Class 1 (Middle-Income): {c1} ({c1/len(labels)*100:.1f}%)")
-print(f"Class 2 (High-Income): {c2} ({c2/len(labels)*100:.1f}%)")
-print(f"Missing / NaN values: {'Yes' if has_nan else '0 (Clean)'}")
+# -------------------------------------------------------------------
+# RUN ON ITS OWN: py src/prepare_dataset.py
+# -------------------------------------------------------------------
+if __name__ == "__main__":
+    dataset = data_preprocessing(data_cleaning(data_collection()))
 
-# save cleaned csv
-out_file = os.path.join(ROOT, "data", "processed", "table7_cleaned.csv")
+    # validation checks and summary
+    labels = list(dataset["y"])
+    c0 = labels.count(0)
+    c1 = labels.count(1)
+    c2 = labels.count(2)
 
-with open(out_file, "w", newline="", encoding="utf-8") as f:
-    writer = csv.writer(f)
-    writer.writerow(out_header)
-    for r in out_rows:
-        formatted_row = [r[0], r[1]]
-        for val in r[2:12]:
-            formatted_row.append(f"{val:.2f}")
-        formatted_row.append(r[12])
-        writer.writerow(formatted_row)
-
-print(f"Output saved to: {out_file}")
+    print(f"Total rows: {len(labels)}")
+    print(f"Total unique areas: {len(set(dataset['areas']))}")
+    print(f"Class 0 (Low-Income): {c0} ({c0/len(labels)*100:.1f}%)")
+    print(f"Class 1 (Middle-Income): {c1} ({c1/len(labels)*100:.1f}%)")
+    print(f"Class 2 (High-Income): {c2} ({c2/len(labels)*100:.1f}%)")
+    print(f"Output saved to: {PROCESSED_PATH}")
 
