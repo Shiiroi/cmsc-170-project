@@ -13,3 +13,21 @@ body {
 .site-nav a.active {
   font-weight: bold;
 }
+
+
+/* ---------- pipeline figure (pipeline.html) ---------- */
+.pipeline-figure { margin: 12px 0 16px; overflow-x: auto; }
+.pipeline-svg { width: 100%; min-width: 620px; max-width: 900px; height: auto; display: block; }
+.pipe-box rect { fill: #f6f7fb; stroke: #99a; stroke-width: 1.2; }
+.pipe-box.data rect { fill: #fff; stroke-dasharray: 5 3; }
+.pipe-box:hover rect { fill: #e3e7f7; }
+.pipe-box.current rect { fill: #3b4cca; stroke: #3b4cca; }
+.pipe-label { font: 14px sans-serif; text-anchor: middle; fill: #222; }
+.pipe-sub { font: 11px monospace; text-anchor: middle; fill: #667; }
+.pipe-box.current .pipe-label, .pipe-box.current .pipe-sub { fill: #fff; }
+.pipe-line { stroke: #889; stroke-width: 1.5; }
+.pipe-arrowhead { fill: #889; }
+ 
+/* "What it does / Input → output / Where in the code" box */
+.stage-meta { background: #f6f7fb; border-left: 3px solid #99a; padding: 6px 12px; margin: 8px 0; }
+.stage-meta p { margin: 4px 0; }
