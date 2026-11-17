@@ -17,20 +17,102 @@
 
     <main>
         <h1>Methods in Depth</h1>
-        <p>TODO: intro</p>
+        <p>How each of our three classifiers works, how we implemented it from scratch, and its
+            results on the test set. The side-by-side comparison is in
+            <a href="index.html#results">Results</a>.</p>
 
         <section id="naive-bayes">
             <h2>Gaussian Naive Bayes</h2>
+
             <h3>Idea</h3>
-            <p>TODO</p>
+            <p>
+                Naive Bayes asks: <em>which income tier makes this spending pattern most likely?</em>
+                It starts with how common each tier is, checks how typical each spending share is
+                for that tier, and picks the tier with the highest combined score.
+            </p>
+
             <h3>How it works</h3>
-            <p>TODO</p>
+            <p>It uses Bayes' rule:</p>
+<pre><code>P(tier | x)  ∝  P(tier) × P(x₁ | tier) × P(x₂ | tier) × … × P(x₁₀ | tier)
+ posterior        prior              likelihoods</code></pre>
+            <ul>
+                <li><strong>Prior P(tier):</strong> the fraction of training rows in that tier
+                    (0.3, 0.4, 0.3).</li>
+                <li><strong>Likelihood P(xⱼ | tier):</strong> our features are percentages, not
+                    counts, so each feature in each tier is modelled as a <em>bell curve</em>
+                    (Gaussian) with that tier's mean μ and variance σ²:
+<pre><code>P(x | tier) = 1 / √(2πσ²) × exp( −(x − μ)² / (2σ²) )</code></pre>
+                </li>
+                <li><strong>"Naive" assumption:</strong> features are treated as independent given
+                    the tier, so their likelihoods are simply multiplied.</li>
+                <li><strong>Evidence P(x)</strong> is skipped: it is the same for every tier, so it
+                    does not change which tier wins.</li>
+            </ul>
+            <p>
+                Multiplying many small probabilities can round down to 0, so we work with
+                <strong>logs</strong>, which turn the products into sums:
+            </p>
+<pre><code>score(tier) = log P(tier) + Σⱼ log P(xⱼ | tier)
+prediction  = the tier with the highest score</code></pre>
+
             <h3>How we implemented it</h3>
-            <p>TODO</p>
+            <p><code>fit()</code> learns a prior, and a mean and variance for every feature, per tier:</p>
+<pre><code>for c in classes:
+    Xc = X[y == c]                                  # rows of tier c
+    priors.append(len(Xc) / len(X))                 # P(tier)
+    means.append(Xc.mean(axis=0))                   # μ of each feature
+    variances.append(Xc.var(axis=0) + smoothing)    # σ² of each feature</code></pre>
+            <p><code>smoothing</code> is the <code>var_smoothing</code> hyperparameter (1e-9): a tiny
+                value added to every variance so it is never 0, since dividing by 0 would break the
+                formula. It plays the same role as additive (Laplace) smoothing for word counts.</p>
+
+            <p><code>log_likelihood()</code> computes the log of the bell curve directly
+                (log(a × b) = log a + log b):</p>
+<pre><code>log_coeff    = -0.5 * np.log(2 * np.pi * var)
+log_exponent = -((x - mean) ** 2) / (2 * var)
+return log_coeff + log_exponent</code></pre>
+
+            <p><code>predict()</code> scores every tier and picks the highest:</p>
+<pre><code>log_prior       = np.log(priors[i])
+log_likelihoods = log_likelihood(row, means[i], variances[i])   # all 10 features at once
+scores.append(log_prior + np.sum(log_likelihoods))
+...
+predictions.append(classes[np.argmax(scores)])</code></pre>
+
+            <p>Pipeline interface: <code>train_nb()</code> wraps <code>fit()</code>,
+                and <code>predict_nb()</code> wraps <code>predict()</code>.</p>
+
             <h3>Results on the test set</h3>
-            <p>TODO</p>
+            <p>Accuracy: <strong>68.57%</strong></p>
+            <table>
+                <thead>
+                    <tr><th>Income tier</th><th>Precision</th><th>Recall</th><th>F1</th><th>Test rows</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Low</td><td>0.7053</td><td>0.6381</td><td>0.6700</td><td>105</td></tr>
+                    <tr><td>Middle</td><td>0.6074</td><td>0.7071</td><td>0.6535</td><td>140</td></tr>
+                    <tr><td>High</td><td>0.8043</td><td>0.7048</td><td>0.7513</td><td>105</td></tr>
+                    <tr><td><strong>Weighted mean</strong></td><td>0.6958</td><td>0.6857</td><td>0.6878</td><td>350</td></tr>
+                </tbody>
+            </table>
+            <p>NB does best on the High tier (F1 0.75). Middle has the highest recall (0.71) but the
+                lowest precision (0.61): the model often predicts Middle for rows that are really Low
+                or High, which makes sense since Middle sits between the other two tiers.</p>
+
             <h3>Notes and references</h3>
-            <p>TODO</p>
+            <ul>
+                <li>Gaussian NB is the variant of Naive Bayes for continuous features. Our lab
+                    version counted words; here each feature is a bell curve instead.</li>
+                <li>Limitation: the independence assumption does not hold for our data. The
+                    10 shares are parts of one budget, so when one share goes up, others go down.</li>
+                <li>Structure adapted from D. Oniani, <em>ai</em> repository (MIT License),
+                    <a href="https://github.com/oniani/ai/blob/main/model/ml/gaussian_naive_bayes.py">gaussian_naive_bayes.py</a>.
+                    Our changes: priors and variance smoothing computed once in <code>fit()</code>;
+                    the log of the Gaussian computed directly to avoid log(0).</li>
+                <li>Formula: scikit-learn documentation,
+                    <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#gaussian-naive-bayes">Gaussian Naive Bayes</a>
+                    (used as a reference only; no scikit-learn code is used).</li>
+            </ul>
         </section>
 
         <section id="knn">
