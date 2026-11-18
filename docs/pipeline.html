@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pipeline in Depth — CMSC 170 Project</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <header class="site-header">
         <nav class="site-nav">
@@ -23,28 +25,66 @@
         <section id="pipeline">
             <!-- whole pipeline -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow1)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow1)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow1)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow1)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow1)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow1)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow1)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow1)"/>
-<a href="#collection" class="pipe-box step"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow1)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow1)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow1)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow1)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow1)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow1)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow1)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow1)" />
+                    <a href="#collection" class="pipe-box step">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
             <p><code>main.py</code> runs every step in order; each step's output is the next step's input:</p>
-<pre><code>raw_rows            = data_collection()                  # prepare_dataset.py
+            <pre><code>raw_rows            = data_collection()                  # prepare_dataset.py
 cleaned_rows        = data_cleaning(raw_rows)            # prepare_dataset.py
 dataset             = data_preprocessing(cleaned_rows)   # prepare_dataset.py
 train_set, test_set = split_data_set(dataset)            # data_utils.py
@@ -56,33 +96,75 @@ results             = model_evaluation(models, test_set) # evaluation.py</code><
             <h2>1. Data Collection</h2>
             <!-- Data Collection step -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow2)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow2)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow2)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow2)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow2)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow2)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow2)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow2)"/>
-<a href="#collection" class="pipe-box step current"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow2)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow2)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow2)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow2)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow2)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow2)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow2)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow2)" />
+                    <a href="#collection" class="pipe-box step current">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
 
             <div class="stage-meta">
-                <p><strong>What it does:</strong> Reads the raw PSA table (2023 FIES, Table 7) and finds the header row with the 10 decile columns.</p>
-                <p><strong>Input → output:</strong> raw CSV file → raw rows: <code>(area, category, [10 decile values])</code></p>
-                <p><strong>Where in the code:</strong> <code>prepare_dataset.py</code> → <code>data_collection()</code></p>
+                <p><strong>What it does:</strong> Reads the raw PSA table (2023 FIES, Table 7) and finds the header row
+                    with the 10 decile columns.</p>
+                <p><strong>Input → output:</strong> raw CSV file → raw rows:
+                    <code>(area, category, [10 decile values])</code>
+                </p>
+                <p><strong>Where in the code:</strong> <code>prepare_dataset.py</code> → <code>data_collection()</code>
+                </p>
             </div>
-<pre><code>for row in reader:
+            <pre><code>for row in reader:
     if header is None:            # skip the title rows until the 10 decile columns are found
         ...
         continue
@@ -98,31 +180,72 @@ results             = model_evaluation(models, test_set) # evaluation.py</code><
             <h2>2. Data Cleaning</h2>
             <!-- Data Cleaning step -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow3)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow3)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow3)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow3)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow3)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow3)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow3)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow3)"/>
-<a href="#collection" class="pipe-box step"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step current"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow3)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow3)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow3)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow3)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow3)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow3)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow3)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow3)" />
+                    <a href="#collection" class="pipe-box step">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step current">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
 
             <div class="stage-meta">
-                <p><strong>What it does:</strong> Removes rows that are totals of other rows, and cleans area and category names.</p>
+                <p><strong>What it does:</strong> Removes rows that are totals of other rows, and cleans area and
+                    category names.</p>
                 <p><strong>Input → output:</strong> raw rows → cleaned rows (same format)</p>
-                <p><strong>Where in the code:</strong> <code>prepare_dataset.py</code> → <code>data_cleaning()</code>, <code>is_regional_or_national()</code>, <code>clean_area()</code>, <code>clean_cat()</code></p>
+                <p><strong>Where in the code:</strong> <code>prepare_dataset.py</code> → <code>data_cleaning()</code>,
+                    <code>is_regional_or_national()</code>, <code>clean_area()</code>, <code>clean_cat()</code>
+                </p>
             </div>
             <ul>
                 <li><strong>Aggregates removed:</strong> the Philippines total, the 18 regions, and
@@ -131,7 +254,7 @@ results             = model_evaluation(models, test_set) # evaluation.py</code><
                 <li><strong>Names cleaned:</strong> leading dots, footnote marks (e.g. <code>1/</code>),
                     extra spaces, and broken "ñ" characters.</li>
             </ul>
-<pre><code>for raw_area, raw_cat, values in raw_rows:
+            <pre><code>for raw_area, raw_cat, values in raw_rows:
     if is_regional_or_national(raw_area):
         continue
     cleaned_rows.append((clean_area(raw_area), clean_cat(raw_cat), values))</code></pre>
@@ -141,38 +264,80 @@ results             = model_evaluation(models, test_set) # evaluation.py</code><
             <h2>3. Data Preprocessing</h2>
             <!-- Data Preprocessing step -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow4)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow4)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow4)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow4)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow4)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow4)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow4)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow4)"/>
-<a href="#collection" class="pipe-box step"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step current"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow4" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow4)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow4)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow4)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow4)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow4)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow4)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow4)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow4)" />
+                    <a href="#collection" class="pipe-box step">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step current">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
 
             <div class="stage-meta">
-                <p><strong>What it does:</strong> Keeps the 10 expenditure groups, turns the 10 decile columns into rows, and labels each row with its income tier.</p>
-                <p><strong>Input → output:</strong> cleaned rows → <code>dataset</code> = {X (1,180 × 10), y, areas, deciles, features}, also saved as <code>data/processed/table7_cleaned.csv</code></p>
-                <p><strong>Where in the code:</strong> <code>prepare_dataset.py</code> → <code>data_preprocessing()</code>, <code>get_tier()</code></p>
+                <p><strong>What it does:</strong> Keeps the 10 expenditure groups, turns the 10 decile columns into
+                    rows, and labels each row with its income tier.</p>
+                <p><strong>Input → output:</strong> cleaned rows → <code>dataset</code> = {X (1,180 × 10), y, areas,
+                    deciles, features}, also saved as <code>data/processed/table7_cleaned.csv</code></p>
+                <p><strong>Where in the code:</strong> <code>prepare_dataset.py</code> →
+                    <code>data_preprocessing()</code>, <code>get_tier()</code>
+                </p>
             </div>
             <ol>
                 <li><strong>Select features:</strong> keep only the 10 expenditure groups.</li>
                 <li><strong>Reshape:</strong> one row per (area, decile): 118 areas × 10 = 1,180 rows.</li>
                 <li><strong>Label:</strong> deciles 1–3 → Low (0), 4–7 → Middle (1), 8–10 → High (2).</li>
             </ol>
-<pre><code>for area in areas:
+            <pre><code>for area in areas:
     for d in range(1, 11):
         r = [area, d]
         for col in feature_names:
@@ -187,33 +352,74 @@ results             = model_evaluation(models, test_set) # evaluation.py</code><
             <h2>4. Split Data Set</h2>
             <!-- Split Data Set step -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow5)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow5)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow5)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow5)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow5)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow5)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow5)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow5)"/>
-<a href="#collection" class="pipe-box step"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step current"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data current"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data current"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow5" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow5)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow5)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow5)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow5)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow5)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow5)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow5)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow5)" />
+                    <a href="#collection" class="pipe-box step">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step current">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data current">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data current">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
 
             <div class="stage-meta">
                 <p><strong>What it does:</strong> Splits the data 70/30 by area, at random with a fixed seed (42).</p>
-                <p><strong>Input → output:</strong> <code>dataset</code> (1,180 rows) → <code>train_set</code> (830 rows, 83 areas) + <code>test_set</code> (350 rows, 35 areas)</p>
-                <p><strong>Where in the code:</strong> <code>data_utils.py</code> → <code>split_data_set()</code>, <code>split_by_area()</code></p>
+                <p><strong>Input → output:</strong> <code>dataset</code> (1,180 rows) → <code>train_set</code> (830
+                    rows, 83 areas) + <code>test_set</code> (350 rows, 35 areas)</p>
+                <p><strong>Where in the code:</strong> <code>data_utils.py</code> → <code>split_data_set()</code>,
+                    <code>split_by_area()</code>
+                </p>
             </div>
-<pre><code>unique_areas = sorted(set(areas))       # same starting order every run
+            <pre><code>unique_areas = sorted(set(areas))       # same starting order every run
 rng = random.Random(seed)               # fixed seed → same split every run
 rng.shuffle(unique_areas)               # shuffle AREAS, not rows
 n_test = round(len(unique_areas) * test_ratio)
@@ -227,36 +433,77 @@ test_areas = set(unique_areas[:n_test])</code></pre>
             <h2>5. Model Training</h2>
             <!-- Model Training step  -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow6)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow6)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow6)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow6)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow6)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow6)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow6)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow6)"/>
-<a href="#collection" class="pipe-box step"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data current"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step current"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow6" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow6)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow6)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow6)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow6)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow6)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow6)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow6)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow6)" />
+                    <a href="#collection" class="pipe-box step">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data current">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step current">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
             <div class="stage-meta">
                 <p><strong>What it does:</strong> Trains all three methods on the same training set.</p>
-                <p><strong>Input → output:</strong> <code>train_set</code> → <code>models</code> (one trained model per method)</p>
-                <p><strong>Where in the code:</strong> <code>training.py</code> → <code>model_training()</code>, which calls each method's <code>train_x()</code></p>
+                <p><strong>Input → output:</strong> <code>train_set</code> → <code>models</code> (one trained model per
+                    method)</p>
+                <p><strong>Where in the code:</strong> <code>training.py</code> → <code>model_training()</code>, which
+                    calls each method's <code>train_x()</code></p>
             </div>
             <p>Every method exposes the same two functions, so <code>model_training()</code> and
-                <code>model_evaluation()</code> treat all three the same way:</p>
-<pre><code>model       = train_x(X_train, y_train, settings)   # learn from the training set
+                <code>model_evaluation()</code> treat all three the same way:
+            </p>
+            <pre><code>model       = train_x(X_train, y_train, settings)   # learn from the training set
 predictions = predict_x(model, X_test)               # used in Evaluation</code></pre>
-<pre><code>def model_training(train_set):
+            <pre><code>def model_training(train_set):
     X, y, features = train_set["X"], train_set["y"], train_set["features"]
     return {
         "Gaussian Naive Bayes": train_nb(X, y, var_smoothing=1e-9),
@@ -267,18 +514,44 @@ predictions = predict_x(model, X_test)               # used in Evaluation</code>
             <h3 id="hyperparameters">Hyperparameters</h3>
             <p>All settings are passed in <code>model_training()</code>, so they are in one place.</p>
             <table>
-                <thead><tr><th>Method</th><th>Hyperparameter</th><th>Value</th><th>Meaning</th></tr></thead>
+                <thead>
+                    <tr>
+                        <th>Method</th>
+                        <th>Hyperparameter</th>
+                        <th>Value</th>
+                        <th>Meaning</th>
+                    </tr>
+                </thead>
                 <tbody>
-                    <tr><td>Gaussian Naive Bayes</td><td><code>var_smoothing</code></td><td>1e-9</td>
-                        <td>Added to every variance so it is never 0 (dividing by 0 would break the Gaussian formula)</td></tr>
-                    <tr><td rowspan="2">KNN</td><td><code>k</code></td><td>5</td>
-                        <td>Number of nearest neighbors that vote; odd, to reduce ties</td></tr>
-                    <tr><td><code>p</code></td><td>2</td>
-                        <td>Minkowski power: 1 = Manhattan, 2 = Euclidean distance</td></tr>
-                    <tr><td rowspan="2">C4.5 Decision Tree</td><td><code>max_depth</code></td><td>10</td>
-                        <td>Most questions the tree asks before answering</td></tr>
-                    <tr><td><code>min_samples</code></td><td>10</td>
-                        <td>A node with fewer training rows is not split further</td></tr>
+                    <tr>
+                        <td>Gaussian Naive Bayes</td>
+                        <td><code>var_smoothing</code></td>
+                        <td>1e-9</td>
+                        <td>Added to every variance so it is never 0 (dividing by 0 would break the Gaussian formula)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">KNN</td>
+                        <td><code>k</code></td>
+                        <td>5</td>
+                        <td>Number of nearest neighbors that vote; odd, to reduce ties</td>
+                    </tr>
+                    <tr>
+                        <td><code>p</code></td>
+                        <td>2</td>
+                        <td>Minkowski power: 1 = Manhattan, 2 = Euclidean distance</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2">C4.5 Decision Tree</td>
+                        <td><code>max_depth</code></td>
+                        <td>10</td>
+                        <td>Most questions the tree asks before answering</td>
+                    </tr>
+                    <tr>
+                        <td><code>min_samples</code></td>
+                        <td>10</td>
+                        <td>A node with fewer training rows is not split further</td>
+                    </tr>
                 </tbody>
             </table>
             <p>How each method works: <a href="methods.html">Methods in depth →</a></p>
@@ -288,35 +561,76 @@ predictions = predict_x(model, X_test)               # used in Evaluation</code>
             <h2>6. Model Performance Evaluation</h2>
             <!-- Model Eval step -->
             <div class="pipeline-figure">
-<svg class="pipeline-svg" viewBox="0 0 900 285" role="img" aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
-<defs><marker id="arrow7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead"/></marker></defs>
-<line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow7)"/>
-<line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow7)"/>
-<line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow7)"/>
-<path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none" marker-end="url(#arrow7)"/>
-<path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow7)"/>
-<line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow7)"/>
-<line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow7)"/>
-<line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow7)"/>
-<a href="#collection" class="pipe-box step"><rect x="10" y="20" width="160" height="50" rx="6"/><text x="90" y="41" class="pipe-label">Data Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text></a>
-<a href="#cleaning" class="pipe-box step"><rect x="190" y="20" width="160" height="50" rx="6"/><text x="270" y="41" class="pipe-label">Data Cleaning</text><text x="270" y="58" class="pipe-sub">data_cleaning()</text></a>
-<a href="#preprocessing" class="pipe-box step"><rect x="370" y="20" width="160" height="50" rx="6"/><text x="450" y="41" class="pipe-label">Data Preprocessing</text><text x="450" y="58" class="pipe-sub">data_preprocessing()</text></a>
-<a href="#split" class="pipe-box step"><rect x="550" y="20" width="160" height="50" rx="6"/><text x="630" y="41" class="pipe-label">Split Data Set</text><text x="630" y="58" class="pipe-sub">split_data_set()</text></a>
-<a href="#split" class="pipe-box data"><rect x="370" y="120" width="160" height="50" rx="6"/><text x="450" y="141" class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83 areas</text></a>
-<a href="#split" class="pipe-box data current"><rect x="730" y="120" width="160" height="50" rx="6"/><text x="810" y="141" class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35 areas</text></a>
-<a href="#training" class="pipe-box step"><rect x="370" y="220" width="160" height="50" rx="6"/><text x="450" y="241" class="pipe-label">Model Training</text><text x="450" y="258" class="pipe-sub">model_training()</text></a>
-<a href="#evaluation" class="pipe-box step current"><rect x="730" y="220" width="160" height="50" rx="6"/><text x="810" y="241" class="pipe-label">Model Evaluation</text><text x="810" y="258" class="pipe-sub">model_evaluation()</text></a>
-</svg>
+                <svg class="pipeline-svg" viewBox="0 0 900 285" role="img"
+                    aria-label="ML pipeline: data collection, data cleaning, data preprocessing, split data set into train set and test set, model training on the train set, model performance evaluation on the test set">
+                    <defs>
+                        <marker id="arrow7" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7"
+                            orient="auto-start-reverse">
+                            <path d="M0,0 L10,5 L0,10 z" class="pipe-arrowhead" />
+                        </marker>
+                    </defs>
+                    <line class="pipe-line" x1="170" y1="45" x2="188" y2="45" marker-end="url(#arrow7)" />
+                    <line class="pipe-line" x1="350" y1="45" x2="368" y2="45" marker-end="url(#arrow7)" />
+                    <line class="pipe-line" x1="530" y1="45" x2="548" y2="45" marker-end="url(#arrow7)" />
+                    <path class="pipe-line" d="M630,70 L630,95 L450,95 L450,118" fill="none"
+                        marker-end="url(#arrow7)" />
+                    <path class="pipe-line" d="M630,95 L810,95 L810,118" fill="none" marker-end="url(#arrow7)" />
+                    <line class="pipe-line" x1="450" y1="170" x2="450" y2="218" marker-end="url(#arrow7)" />
+                    <line class="pipe-line" x1="810" y1="170" x2="810" y2="218" marker-end="url(#arrow7)" />
+                    <line class="pipe-line" x1="530" y1="245" x2="728" y2="245" marker-end="url(#arrow7)" />
+                    <a href="#collection" class="pipe-box step">
+                        <rect x="10" y="20" width="160" height="50" rx="6" /><text x="90" y="41" class="pipe-label">Data
+                            Collection</text><text x="90" y="58" class="pipe-sub">data_collection()</text>
+                    </a>
+                    <a href="#cleaning" class="pipe-box step">
+                        <rect x="190" y="20" width="160" height="50" rx="6" /><text x="270" y="41"
+                            class="pipe-label">Data Cleaning</text><text x="270" y="58"
+                            class="pipe-sub">data_cleaning()</text>
+                    </a>
+                    <a href="#preprocessing" class="pipe-box step">
+                        <rect x="370" y="20" width="160" height="50" rx="6" /><text x="450" y="41"
+                            class="pipe-label">Data Preprocessing</text><text x="450" y="58"
+                            class="pipe-sub">data_preprocessing()</text>
+                    </a>
+                    <a href="#split" class="pipe-box step">
+                        <rect x="550" y="20" width="160" height="50" rx="6" /><text x="630" y="41"
+                            class="pipe-label">Split Data Set</text><text x="630" y="58"
+                            class="pipe-sub">split_data_set()</text>
+                    </a>
+                    <a href="#split" class="pipe-box data">
+                        <rect x="370" y="120" width="160" height="50" rx="6" /><text x="450" y="141"
+                            class="pipe-label">Train Set</text><text x="450" y="158" class="pipe-sub">830 rows · 83
+                            areas</text>
+                    </a>
+                    <a href="#split" class="pipe-box data current">
+                        <rect x="730" y="120" width="160" height="50" rx="6" /><text x="810" y="141"
+                            class="pipe-label">Test Set</text><text x="810" y="158" class="pipe-sub">350 rows · 35
+                            areas</text>
+                    </a>
+                    <a href="#training" class="pipe-box step">
+                        <rect x="370" y="220" width="160" height="50" rx="6" /><text x="450" y="241"
+                            class="pipe-label">Model Training</text><text x="450" y="258"
+                            class="pipe-sub">model_training()</text>
+                    </a>
+                    <a href="#evaluation" class="pipe-box step current">
+                        <rect x="730" y="220" width="160" height="50" rx="6" /><text x="810" y="241"
+                            class="pipe-label">Model Evaluation</text><text x="810" y="258"
+                            class="pipe-sub">model_evaluation()</text>
+                    </a>
+                </svg>
             </div>
 
             <div class="stage-meta">
-                <p><strong>What it does:</strong> Predicts the test set with every model and scores all of them with the same metrics.</p>
-                <p><strong>Input → output:</strong> <code>models</code> + <code>test_set</code> → <code>results</code> (predictions + metrics per method)</p>
-                <p><strong>Where in the code:</strong> <code>evaluation.py</code> → <code>model_evaluation()</code>; metrics in <code>metrics.py</code></p>
+                <p><strong>What it does:</strong> Predicts the test set with every model and scores all of them with the
+                    same metrics.</p>
+                <p><strong>Input → output:</strong> <code>models</code> + <code>test_set</code> → <code>results</code>
+                    (predictions + metrics per method)</p>
+                <p><strong>Where in the code:</strong> <code>evaluation.py</code> → <code>model_evaluation()</code>;
+                    metrics in <code>metrics.py</code></p>
             </div>
             <p>For each trained model, <code>model_evaluation()</code> predicts the test set and
                 scores the predictions with the same metric functions from <code>metrics.py</code>:</p>
-<pre><code>for name, model in models.items():
+            <pre><code>for name, model in models.items():
     pred = PREDICT[name](model, test_set["X"])       # predict_nb / predict_knn / predict_dt
 
     precision = get_precision(y_test, pred)          # per tier
@@ -332,7 +646,8 @@ predictions = predict_x(model, X_test)               # used in Evaluation</code>
     }</code></pre>
             <p>The test set is used only here, once, after training. What each metric means:
                 <a href="metrics.html">Metrics in depth →</a> · Each model's results:
-                <a href="methods.html">Methods in depth →</a></p>
+                <a href="methods.html">Methods in depth →</a>
+            </p>
         </section>
     </main>
 
@@ -340,4 +655,5 @@ predictions = predict_x(model, X_test)               # used in Evaluation</code>
         <p>CMSC 170 Project</p>
     </footer>
 </body>
+
 </html>
