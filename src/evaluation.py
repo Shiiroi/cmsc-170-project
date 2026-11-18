@@ -28,6 +28,9 @@ def model_evaluation(models, test_set):
             "precision": get_weighted_mean(precision, counts),
             "recall": get_weighted_mean(recall, counts),
             "f1": get_weighted_mean(f1, counts),
+            "precision_by_class": precision,
+            "recall_by_class": recall,
+            "f1_by_class": f1
         }
     return results
 
