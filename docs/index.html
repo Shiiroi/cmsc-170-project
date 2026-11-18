@@ -220,7 +220,66 @@
             <!-- 6. Results -->
             <section id="results">
                 <h2>Results</h2>
-                <p>TODO: comparison table and figures</p>
+                <p>Test-set performance across all three classifiers (350 test rows across 35 areas;
+                    Precision, Recall, and F1 are weighted means across the three income tiers).</p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gaussian Naive Bayes</td>
+                            <td>68.57%</td>
+                            <td>0.6958</td>
+                            <td>0.6857</td>
+                            <td>0.6878</td>
+                        </tr>
+                        <tr>
+                            <td>K-Nearest Neighbors</td>
+                            <td>65.43%</td>
+                            <td>0.6658</td>
+                            <td>0.6543</td>
+                            <td>0.6506</td>
+                        </tr>
+                        <tr>
+                            <td>C4.5 Decision Tree</td>
+                            <td>58.86%</td>
+                            <td>0.6792</td>
+                            <td>0.5886</td>
+                            <td>0.5625</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="figures-grid">
+                    <figure class="figure-card">
+                        <img src="assets/figures/overall_metrics.png"
+                            alt="Bar chart comparing overall accuracy, precision, recall, and F1 across all three methods">
+                        <figcaption>Overall accuracy, precision, recall, and F1 by method.</figcaption>
+                    </figure>
+                    <figure class="figure-card">
+                        <img src="assets/figures/precision_by_tier.png"
+                            alt="Bar chart comparing precision by income tier across all three methods">
+                        <figcaption>Precision by income tier (Low, Middle, High).</figcaption>
+                    </figure>
+                    <figure class="figure-card">
+                        <img src="assets/figures/recall_by_tier.png"
+                            alt="Bar chart comparing recall by income tier across all three methods">
+                        <figcaption>Recall by income tier (Low, Middle, High).</figcaption>
+                    </figure>
+                    <figure class="figure-card">
+                        <img src="assets/figures/f1_by_tier.png"
+                            alt="Bar chart comparing F1 score by income tier across all three methods">
+                        <figcaption>F1-score by income tier (Low, Middle, High).</figcaption>
+                    </figure>
+                </div>
+
                 <p><a href="pipeline.html#evaluation">In depth →</a></p>
             </section>
 
