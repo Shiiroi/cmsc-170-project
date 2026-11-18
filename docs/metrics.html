@@ -1,39 +1,52 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Metrics in Depth — CMSC 170 Project</title>
-    <link rel="stylesheet" href="css/style.css">
-</head>
-<body>
-    <header class="site-header">
-        <nav class="site-nav">
-            <a href="index.html">← Back to main page</a>
-            <a href="pipeline.html">Pipeline in depth</a>
-            <a href="methods.html">Methods in depth</a>
-        </nav>
-    </header>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Metrics in Depth — CMSC 170 Project</title>
+        <link rel="stylesheet" href="css/style.css" />
+    </head>
+    <body>
+        <header class="site-header">
+            <nav class="site-nav">
+                <a href="index.html">← Back to main page</a>
+                <a href="pipeline.html">Pipeline in depth</a>
+                <a href="methods.html">Methods in depth</a>
+            </nav>
+        </header>
 
-    <main>
-        <h1>Metrics in Depth</h1>
-        <p>How we measure each model's performance. All metrics are implemented from scratch
-            in <code>metrics.py</code>.</p>
+        <main>
+            <h1>Metrics in Depth</h1>
+            <p>How we measure each model's performance. All metrics are implemented from scratch in <code>metrics.py</code>.</p>
 
-        <section id="confusion">
-            <h2>True positives, false positives, false negatives</h2>
-            <p>Precision, recall and F1 are computed <strong>per income tier</strong>. For one tier
-                (say, Low), every test row falls into one of these:</p>
-            <table>
-                <thead>
-                    <tr><th></th><th>Predicted Low</th><th>Predicted not Low</th></tr>
-                </thead>
-                <tbody>
-                    <tr><th>Actually Low</th><td><strong>TP</strong>: true positive</td><td><strong>FN</strong>: false negative (missed)</td></tr>
-                    <tr><th>Actually not Low</th><td><strong>FP</strong>: false positive (false alarm)</td><td>true negative</td></tr>
-                </tbody>
-            </table>
-<pre><code>def true_positive(y_true, y_pred, target_class):
+            <section id="confusion">
+                <h2>True positives, false positives, false negatives</h2>
+                <p>
+                    Precision, recall and F1 are computed <strong>per income tier</strong>. For one tier (say, Low), every test row falls into one of
+                    these:
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Predicted Low</th>
+                            <th>Predicted not Low</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>Actually Low</th>
+                            <td><strong>TP</strong>: true positive</td>
+                            <td><strong>FN</strong>: false negative (missed)</td>
+                        </tr>
+                        <tr>
+                            <th>Actually not Low</th>
+                            <td><strong>FP</strong>: false positive (false alarm)</td>
+                            <td>true negative</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre><code>def true_positive(y_true, y_pred, target_class):
     tp = 0
     for gt, pred in zip(y_true, y_pred):
         if gt == target_class and pred == target_class:
@@ -41,81 +54,93 @@
     return tp
 # false_positive(): gt != target_class and pred == target_class
 # false_negative(): gt == target_class and pred != target_class</code></pre>
-        </section>
+            </section>
 
-        <section id="accuracy">
-            <h2>Accuracy</h2>
-<pre><code>Accuracy = correct predictions / all predictions × 100%</code></pre>
-            <p>The simplest measure: the share of test rows whose tier was predicted correctly.
-                It treats every row the same, so a model can score well by being good at the
-                largest tier (Middle, 40% of rows) only.</p>
-<pre><code>def accuracy_metric(actual, predicted):
+            <section id="accuracy">
+                <h2>Accuracy</h2>
+                <pre><code>Accuracy = correct predictions / all predictions × 100%</code></pre>
+                <p>
+                    The simplest measure: the share of test rows whose tier was predicted correctly. It treats every row the same, so a model can
+                    score well by being good at the largest tier (Middle, 40% of rows) only.
+                </p>
+                <pre><code>def accuracy_metric(actual, predicted):
     correct = 0
     for i in range(len(actual)):
         if actual[i] == predicted[i]:
             correct += 1
     return correct / float(len(actual)) * 100.0</code></pre>
-        </section>
+            </section>
 
-        <section id="precision">
-            <h2>Precision</h2>
-<pre><code>Precision = TP / (TP + FP)</code></pre>
-            <p><em>Of the rows the model predicted as this tier, how many really are?</em>
-                High precision means few false alarms.</p>
-<pre><code>tp = true_positive(y_true, y_pred, class_idx)
+            <section id="precision">
+                <h2>Precision</h2>
+                <pre><code>Precision = TP / (TP + FP)</code></pre>
+                <p><em>Of the rows the model predicted as this tier, how many really are?</em> High precision means few false alarms.</p>
+                <pre><code>tp = true_positive(y_true, y_pred, class_idx)
 fp = false_positive(y_true, y_pred, class_idx)
 precision_dict[class_name] = float(tp) / float(tp + fp)   # 0.0 if tp + fp == 0</code></pre>
-        </section>
+            </section>
 
-        <section id="recall">
-            <h2>Recall</h2>
-<pre><code>Recall = TP / (TP + FN)</code></pre>
-            <p><em>Of the rows that really are this tier, how many did the model find?</em>
-                High recall means few misses.</p>
-<pre><code>tp = true_positive(y_true, y_pred, class_idx)
+            <section id="recall">
+                <h2>Recall</h2>
+                <pre><code>Recall = TP / (TP + FN)</code></pre>
+                <p><em>Of the rows that really are this tier, how many did the model find?</em> High recall means few misses.</p>
+                <pre><code>tp = true_positive(y_true, y_pred, class_idx)
 fn = false_negative(y_true, y_pred, class_idx)
 recall_dict[class_name] = float(tp) / float(tp + fn)      # 0.0 if tp + fn == 0</code></pre>
-        </section>
+            </section>
 
-        <section id="f1">
-            <h2>F1 score</h2>
-<pre><code>F1 = 2 × (Precision × Recall) / (Precision + Recall)</code></pre>
-            <p>The harmonic mean of precision and recall. It is only high when <em>both</em> are
-                high, so a model cannot score well by predicting one tier for everything.</p>
-<pre><code>p = precision_dict[class_name]
+            <section id="f1">
+                <h2>F1 score</h2>
+                <pre><code>F1 = 2 × (Precision × Recall) / (Precision + Recall)</code></pre>
+                <p>
+                    The harmonic mean of precision and recall. It is only high when <em>both</em> are high, so a model cannot score well by predicting
+                    one tier for everything.
+                </p>
+                <pre><code>p = precision_dict[class_name]
 r = recall_dict[class_name]
 f1_dict[class_name] = 2.0 * ((p * r) / (p + r))           # 0.0 if p + r == 0</code></pre>
-        </section>
+            </section>
 
-        <section id="weighted">
-            <h2>Weighted mean</h2>
-<pre><code>Weighted mean = Σ (score of tier × test rows of tier) / all test rows</code></pre>
-            <p>To get one number per model, the per-tier scores are averaged, weighted by how many
-                test rows each tier has (105 Low, 140 Middle, 105 High).</p>
-<pre><code>def get_weighted_mean(scores, counts):
+            <section id="weighted">
+                <h2>Weighted mean</h2>
+                <pre><code>Weighted mean = Σ (score of tier × test rows of tier) / all test rows</code></pre>
+                <p>
+                    To get one number per model, the per-tier scores are averaged, weighted by how many test rows each tier has (105 Low, 140 Middle,
+                    105 High).
+                </p>
+                <pre><code>def get_weighted_mean(scores, counts):
     total = sum(counts.values())
     weighted_sum = sum(scores[tier] * counts[tier] for tier in scores)
     return weighted_sum / float(total)</code></pre>
-            <p><strong>Note:</strong> the weighted mean of recall always equals accuracy (it adds
-                up to correct predictions / all rows), which is why the two columns match in the
-                results. Weighted precision and F1 do add new information.</p>
-        </section>
+                <p>
+                    <strong>Note:</strong> the weighted mean of recall always equals accuracy (it adds up to correct predictions / all rows), which is
+                    why the two columns match in the results. Weighted precision and F1 do add new information.
+                </p>
+            </section>
 
-        <section id="metric-references">
-            <h2>References</h2>
-            <ul>
-                <li>Accuracy adapted from J. Brownlee,
-                    <a href="https://machinelearningmastery.com/implement-machine-learning-algorithm-performance-metrics-scratch-python/">"How To Implement Machine Learning Algorithm Performance Metrics From Scratch With Python,"</a>
-                    Machine Learning Mastery.</li>
-                <li>Precision, recall and F1 formulas based on A. Abhang,
-                    <a href="https://www.kaggle.com/code/ajinkyaabhang/implementing-acc-precision-recall-f1-from-scratch">"Implementing Acc., Precision, Recall, F1 from scratch,"</a>
-                    Kaggle.</li>
-            </ul>
-        </section>
-    </main>
+            <section id="metric-references">
+                <h2>References</h2>
+                <ul>
+                    <li>
+                        Accuracy adapted from J. Brownlee,
+                        <a href="https://machinelearningmastery.com/implement-machine-learning-algorithm-performance-metrics-scratch-python/"
+                            >"How To Implement Machine Learning Algorithm Performance Metrics From Scratch With Python,"</a
+                        >
+                        Machine Learning Mastery.
+                    </li>
+                    <li>
+                        Precision, recall and F1 formulas based on A. Abhang,
+                        <a href="https://www.kaggle.com/code/ajinkyaabhang/implementing-acc-precision-recall-f1-from-scratch"
+                            >"Implementing Acc., Precision, Recall, F1 from scratch,"</a
+                        >
+                        Kaggle.
+                    </li>
+                </ul>
+            </section>
+        </main>
 
-    <footer class="site-footer">
-        <p>CMSC 170 Project</p>
-    </footer>
-</body>
+        <footer class="site-footer">
+            <p>CMSC 170 Project</p>
+        </footer>
+    </body>
 </html>

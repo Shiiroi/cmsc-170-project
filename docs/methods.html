@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Methods in Depth — CMSC 170 Project</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <header class="site-header">
         <nav class="site-nav">
@@ -19,7 +21,8 @@
         <h1>Methods in Depth</h1>
         <p>How each of our three classifiers works, how we implemented it from scratch, and its
             results on the test set. The side-by-side comparison is in
-            <a href="index.html#results">Results</a>.</p>
+            <a href="index.html#results">Results</a>.
+        </p>
 
         <section id="naive-bayes">
             <h2>Gaussian Naive Bayes</h2>
@@ -33,7 +36,7 @@
 
             <h3>How it works</h3>
             <p>It uses Bayes' rule:</p>
-<pre><code>P(tier | x)  ∝  P(tier) × P(x₁ | tier) × P(x₂ | tier) × … × P(x₁₀ | tier)
+            <pre><code>P(tier | x)  ∝  P(tier) × P(x₁ | tier) × P(x₂ | tier) × … × P(x₁₀ | tier)
  posterior        prior              likelihoods</code></pre>
             <ul>
                 <li><strong>Prior P(tier):</strong> the fraction of training rows in that tier
@@ -41,7 +44,7 @@
                 <li><strong>Likelihood P(xⱼ | tier):</strong> our features are percentages, not
                     counts, so each feature in each tier is modelled as a <em>bell curve</em>
                     (Gaussian) with that tier's mean μ and variance σ²:
-<pre><code>P(x | tier) = 1 / √(2πσ²) × exp( −(x − μ)² / (2σ²) )</code></pre>
+                    <pre><code>P(x | tier) = 1 / √(2πσ²) × exp( −(x − μ)² / (2σ²) )</code></pre>
                 </li>
                 <li><strong>"Naive" assumption:</strong> features are treated as independent given
                     the tier, so their likelihoods are simply multiplied.</li>
@@ -52,12 +55,12 @@
                 Multiplying many small probabilities can round down to 0, so we work with
                 <strong>logs</strong>, which turn the products into sums:
             </p>
-<pre><code>score(tier) = log P(tier) + Σⱼ log P(xⱼ | tier)
+            <pre><code>score(tier) = log P(tier) + Σⱼ log P(xⱼ | tier)
 prediction  = the tier with the highest score</code></pre>
 
             <h3>How we implemented it</h3>
             <p><code>fit()</code> learns a prior, and a mean and variance for every feature, per tier:</p>
-<pre><code>for c in classes:
+            <pre><code>for c in classes:
     Xc = X[y == c]                                  # rows of tier c
     priors.append(len(Xc) / len(X))                 # P(tier)
     means.append(Xc.mean(axis=0))                   # μ of each feature
@@ -68,12 +71,12 @@ prediction  = the tier with the highest score</code></pre>
 
             <p><code>log_likelihood()</code> computes the log of the bell curve directly
                 (log(a × b) = log a + log b):</p>
-<pre><code>log_coeff    = -0.5 * np.log(2 * np.pi * var)
+            <pre><code>log_coeff    = -0.5 * np.log(2 * np.pi * var)
 log_exponent = -((x - mean) ** 2) / (2 * var)
 return log_coeff + log_exponent</code></pre>
 
             <p><code>predict()</code> scores every tier and picks the highest:</p>
-<pre><code>log_prior       = np.log(priors[i])
+            <pre><code>log_prior       = np.log(priors[i])
 log_likelihoods = log_likelihood(row, means[i], variances[i])   # all 10 features at once
 scores.append(log_prior + np.sum(log_likelihoods))
 ...
@@ -86,13 +89,43 @@ predictions.append(classes[np.argmax(scores)])</code></pre>
             <p>Accuracy: <strong>68.57%</strong></p>
             <table>
                 <thead>
-                    <tr><th>Income tier</th><th>Precision</th><th>Recall</th><th>F1</th><th>Test rows</th></tr>
+                    <tr>
+                        <th>Income tier</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1</th>
+                        <th>Test rows</th>
+                    </tr>
                 </thead>
                 <tbody>
-                    <tr><td>Low</td><td>0.7053</td><td>0.6381</td><td>0.6700</td><td>105</td></tr>
-                    <tr><td>Middle</td><td>0.6074</td><td>0.7071</td><td>0.6535</td><td>140</td></tr>
-                    <tr><td>High</td><td>0.8043</td><td>0.7048</td><td>0.7513</td><td>105</td></tr>
-                    <tr><td><strong>Weighted mean</strong></td><td>0.6958</td><td>0.6857</td><td>0.6878</td><td>350</td></tr>
+                    <tr>
+                        <td>Low</td>
+                        <td>0.7053</td>
+                        <td>0.6381</td>
+                        <td>0.6700</td>
+                        <td>105</td>
+                    </tr>
+                    <tr>
+                        <td>Middle</td>
+                        <td>0.6074</td>
+                        <td>0.7071</td>
+                        <td>0.6535</td>
+                        <td>140</td>
+                    </tr>
+                    <tr>
+                        <td>High</td>
+                        <td>0.8043</td>
+                        <td>0.7048</td>
+                        <td>0.7513</td>
+                        <td>105</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Weighted mean</strong></td>
+                        <td>0.6958</td>
+                        <td>0.6857</td>
+                        <td>0.6878</td>
+                        <td>350</td>
+                    </tr>
                 </tbody>
             </table>
             <p>NB does best on the High tier (F1 0.75). Middle has the highest recall (0.71) but the
@@ -106,27 +139,145 @@ predictions.append(classes[np.argmax(scores)])</code></pre>
                 <li>Limitation: the independence assumption does not hold for our data. The
                     10 shares are parts of one budget, so when one share goes up, others go down.</li>
                 <li>Structure adapted from D. Oniani, <em>ai</em> repository (MIT License),
-                    <a href="https://github.com/oniani/ai/blob/main/model/ml/gaussian_naive_bayes.py">gaussian_naive_bayes.py</a>.
+                    <a
+                        href="https://github.com/oniani/ai/blob/main/model/ml/gaussian_naive_bayes.py">gaussian_naive_bayes.py</a>.
                     Our changes: priors and variance smoothing computed once in <code>fit()</code>;
-                    the log of the Gaussian computed directly to avoid log(0).</li>
+                    the log of the Gaussian computed directly to avoid log(0).
+                </li>
                 <li>Formula: scikit-learn documentation,
-                    <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#gaussian-naive-bayes">Gaussian Naive Bayes</a>
-                    (used as a reference only; no scikit-learn code is used).</li>
+                    <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#gaussian-naive-bayes">Gaussian
+                        Naive Bayes</a>
+                    (used as a reference only; no scikit-learn code is used).
+                </li>
             </ul>
         </section>
 
         <section id="knn">
             <h2>K-Nearest Neighbors</h2>
+
             <h3>Idea</h3>
-            <p>TODO</p>
+            <p>
+                K-Nearest Neighbors (KNN) asks: <em>which training rows have the most similar
+                    spending pattern?</em> Instead of fitting a formula during training, it
+                compares each test row against every training row, finds the <code>k</code> closest
+                matches, and lets them vote on the income tier.
+            </p>
+
             <h3>How it works</h3>
-            <p>TODO</p>
+            <p>It measures similarity using Minkowski distance across all 10 spending shares:</p>
+            <pre><code>d(x, y) = ( Σⱼ |xⱼ − yⱼ|ᵖ )^(1/p)</code></pre>
+            <ul>
+                <li><strong>Minkowski distance (<code>p = 2</code>):</strong> sums the feature-wise
+                    differences raised to <code>p</code>, then takes the <code>p</code>-th root.
+                    With <code>p = 2</code>, this is standard Euclidean distance.</li>
+                <li><strong>Top <code>k</code> neighbors (<code>k = 5</code>):</strong> sorts all
+                    830 training rows from smallest distance to largest and keeps the 5 closest
+                    rows.</li>
+                <li><strong>Majority vote:</strong> counts how many of the 5 neighbors belong to
+                    Low, Middle, and High, and picks the tier with the most votes.</li>
+                <li><strong>Tie-breaker:</strong> if two or more tiers tie for the highest vote
+                    count, it picks the tied tier whose neighbor is closest in distance.</li>
+            </ul>
+
             <h3>How we implemented it</h3>
-            <p>TODO</p>
+            <p><code>train_knn()</code> stores the training data and hyperparameters
+                (<code>k = 5</code>, <code>p = 2</code>) in a dictionary—KNN does all its work at
+                prediction time:</p>
+            <pre><code>def train_knn(X_train, y_train, k=5, p=2):
+    return {"X": X_train, "y": y_train, "k": k, "p": p}</code></pre>
+
+            <p><code>minkowski()</code> computes the distance between one training row and one test
+                row across all 10 features:</p>
+            <pre><code>summation = 0
+for i in range(len(testing)):
+    summation += abs(training[i] - testing[i]) ** p
+return summation ** (1.0 / p)</code></pre>
+
+            <p><code>voting()</code> counts the labels of the <code>k</code> nearest neighbors and
+                breaks ties by scanning the sorted labels from closest to farthest:</p>
+            <pre><code>counts = {0: 0, 1: 0, 2: 0}
+for l in labels:
+    counts[l] += 1
+max_votes = max(counts.values())
+winners = [cls for cls, count in counts.items() if count == max_votes]
+if len(winners) == 1:
+    return winners[0]
+for l in labels:
+    if l in winners:
+        return l</code></pre>
+
+            <p><code>predict_knn()</code> computes distances to every training row, sorts them, and
+                votes on the top <code>k</code>:</p>
+            <pre><code>for d in X_test:
+    distances = sorted(
+        [(minkowski(dt, d, p), wt) for dt, wt in zip(model["X"], model["y"])],
+        key=lambda x: x[0],
+    )
+    topk = distances[:k]
+    predictions.append(voting([wp for (_, wp) in topk]))</code></pre>
+
+            <p>Pipeline interface: <code>train_knn()</code> and <code>predict_knn()</code> are
+                called directly by the training and evaluation modules.</p>
+
             <h3>Results on the test set</h3>
-            <p>TODO</p>
+            <p>Accuracy: <strong>65.43%</strong></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Income tier</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1</th>
+                        <th>Test rows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Low</td>
+                        <td>0.7286</td>
+                        <td>0.4857</td>
+                        <td>0.5829</td>
+                        <td>105</td>
+                    </tr>
+                    <tr>
+                        <td>Middle</td>
+                        <td>0.5636</td>
+                        <td>0.6643</td>
+                        <td>0.6098</td>
+                        <td>140</td>
+                    </tr>
+                    <tr>
+                        <td>High</td>
+                        <td>0.7391</td>
+                        <td>0.8095</td>
+                        <td>0.7727</td>
+                        <td>105</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Weighted mean</strong></td>
+                        <td>0.6658</td>
+                        <td>0.6543</td>
+                        <td>0.6506</td>
+                        <td>350</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>KNN does best on the High tier (F1 0.77, recall 0.81). Low has the highest precision
+                among the three tiers after High (0.73) but the lowest recall (0.49): many Low
+                decile rows are misclassified as Middle, because adjacent deciles (such as 3 and 4)
+                have very similar spending shares.</p>
+
             <h3>Notes and references</h3>
-            <p>TODO</p>
+            <ul>
+                <li>KNN is a <em>lazy learner</em>: <code>train_knn()</code> only saves the training
+                    set, and every prediction scans all 830 training rows.</li>
+                <li>Because all 10 features are already expenditure percentages on the same 0–100
+                    scale, no extra feature normalization is needed, though every feature is
+                    weighted equally in the distance sum.</li>
+                <li>Implemented from scratch in <code>src/knn.py</code> with
+                    <code>minkowski()</code>, <code>voting()</code>, <code>train_knn()</code>, and
+                    <code>predict_knn()</code>.</li>
+            </ul>
         </section>
 
         <section id="decision-tree">
@@ -148,4 +299,5 @@ predictions.append(classes[np.argmax(scores)])</code></pre>
         <p>CMSC 170 Project</p>
     </footer>
 </body>
+
 </html>

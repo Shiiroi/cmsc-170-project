@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CMSC 170 Project</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
+
 <body>
     <header class="site-header">
         <nav class="site-nav">
@@ -26,132 +28,212 @@
     <main>
         <!-- 1. Title and group members -->
         <h1>TODO: Project title</h1>
-        <p class="members">TODO: Group members</p>
+        <p class="members">Lab Section: W2l<br>
+            Camba, Jan Zuriel<br>
+            Magwili, Vince Roi<br>
+            Legayo, Ai'Lii</p>
 
         <!-- 2. Problem statement and motivation -->
         <section id="problem">
             <h2>Problem Statement and Motivation</h2>
-            <p>TODO</p>
-        </section>
 
-        <!-- 3. Dataset description -->
-        <section id="dataset">
-            <h2>Dataset</h2>
-            <p><strong>Source:</strong> Philippine Statistics Authority (PSA), 2023 Family Income
-                and Expenditure Survey (FIES), Table 7: Total Annual Family Expenditure by Major
-                Expenditure Group by Per Capita Income Decile and by Region, Province, and HUC.</p>
-            <p><strong>Size:</strong> 1,180 rows = 118 areas (provinces and highly urbanized cities)
-                × 10 income deciles.</p>
-            <p><strong>Features:</strong> 10 expenditure shares, each the percentage of total family
-                spending that goes to: food consumed at home, food consumed outside the home,
-                housing and utilities, transport, information and communication, education, health,
-                clothing and footwear, recreation, and special family occasions.</p>
-            <p><strong>Target:</strong> income tier, made from the per capita income decile:
-                Low (deciles 1–3), Middle (4–7), High (8–10).</p>
-            <p><strong>Preprocessing:</strong></p>
-            <ol>
-                <li>Removed the national and regional total rows.</li>
-                <li>Cleaned area and category names.</li>
-                <li>Selected the 10 expenditure groups.</li>
-                <li>Reshaped the 10 decile columns into rows: one row per area and decile.</li>
-                <li>Labelled each row with its income tier.</li>
-            </ol>
-            <p><a href="pipeline.html#preprocessing">In depth →</a></p>
-        </section>
+            <h3>Problem Statement</h3>
+            <p>Existing Philippine socioeconomic classification models primarily rely on granular household microdata
+                and nominal peso income or expenditure values (Apus et al., 2023; Celis &amp; Pagatpatan, 2019). As
+                established in poverty literature, nominal currency figures suffer from rapid temporal degradation under
+                inflation and fail to account for spatial purchasing power differences across heterogeneous provinces
+                (Albert et al., 2020). Models trained on static cash thresholds may become obsolete across survey
+                cycles unless adjusted with local price indices. In contrast, the Philippine Statistics Authority (PSA,
+                2024) publicly releases macro-level expenditure summaries by income decile across 119 provinces and
+                Highly Urbanized Cities (HUCs). However, it remains unverified whether aggregated, relative expenditure
+                percentage shares alone can overcome this nominal drift and reliably classify regional populations into
+                Low-, Middle-, and High-income tiers without access to absolute income figures or private household
+                records.</p>
 
-        <!-- 4. Methods -->
-        <section id="methods">
-            <h2>Methods</h2>
-            <p>We compare three classification methods, all implemented from scratch in Python
-                . All three use the same 10 features, predict the same 3 income tiers,
-                and are trained and tested on exactly the same rows. Each method has the same
-                two functions: <code>train_x()</code> learns from the training set, and
-                <code>predict_x()</code> predicts the test set.</p>
+            <h3>Motivation</h3>
+            <p>
+                Unlike raw peso amounts that quickly become obsolete under inflation, proportional spending shares
+                provide an inflation-proof measure of living standards based on Engel's Law, where poorer groups are
+                economically forced to spend most of their budget on food while richer groups spend more on services and
+                transport. Furthermore, survey literature shows that collecting accurate absolute income and expenditure
+                figures is notoriously difficult due to recall bias, informal earnings, and reluctance to report cash
+                totals, whereas households can much more easily and accurately estimate the percentage breakdown of
+                their budget (Deaton &amp; Zaidi, 2002). By verifying whether open macro-level budget shares can
+                distinguish socioeconomic tiers, this study gives local planners and researchers a practical diagnostic
+                tool: they can take the average spending breakdown of any newly surveyed community group and instantly
+                benchmark its economic standing against national decile standards without waiting for restricted
+                household survey files.
+            </p>
 
-            <h3>Gaussian Naive Bayes</h3>
-            <p>Picks the income tier that makes a spending pattern most likely. For each tier, it
-                models every feature as a bell curve (Gaussian) using that tier's mean and
-                variance, then combines the 10 features with Bayes' rule, assuming they are
-                independent. Implemented with <code>fit()</code>, <code>log_likelihood()</code>
-                and <code>predict()</code>. <a href="methods.html#naive-bayes">More →</a></p>
+            <!-- 3. Dataset description -->
+            <section id="dataset">
+                <h2>Dataset</h2>
+                <p><strong>Source:</strong> Philippine Statistics Authority (PSA), 2023 Family Income
+                    and Expenditure Survey (FIES), Table 7: Total Annual Family Expenditure by Major
+                    Expenditure Group by Per Capita Income Decile and by Region, Province, and HUC.</p>
+                <p><strong>Size:</strong> 1,180 rows = 118 areas (provinces and highly urbanized cities)
+                    × 10 income deciles.</p>
+                <p><strong>Features:</strong> 10 expenditure shares, each the percentage of total family
+                    spending that goes to: food consumed at home, food consumed outside the home,
+                    housing and utilities, transport, information and communication, education, health,
+                    clothing and footwear, recreation, and special family occasions.</p>
+                <p><strong>Target:</strong> income tier, made from the per capita income decile:
+                    Low (deciles 1–3), Middle (4–7), High (8–10).</p>
+                <p><strong>Preprocessing:</strong></p>
+                <ol>
+                    <li>Removed the national and regional total rows.</li>
+                    <li>Cleaned area and category names.</li>
+                    <li>Selected the 10 expenditure groups.</li>
+                    <li>Reshaped the 10 decile columns into rows: one row per area and decile.</li>
+                    <li>Labelled each row with its income tier.</li>
+                </ol>
+                <p><a href="pipeline.html#preprocessing">In depth →</a></p>
+            </section>
 
-            <h3>K-Nearest Neighbors</h3>
-            <p>TODO: short explanation <a href="methods.html#knn">More →</a></p>
+            <!-- 4. Methods -->
+            <section id="methods">
+                <h2>Methods</h2>
+                <p>We compare three classification methods, all implemented from scratch in Python
+                    . All three use the same 10 features, predict the same 3 income tiers,
+                    and are trained and tested on exactly the same rows. Each method has the same
+                    two functions: <code>train_x()</code> learns from the training set, and
+                    <code>predict_x()</code> predicts the test set.
+                </p>
 
-            <h3>C4.5 Decision Tree</h3>
-            <p>TODO: short explanation <a href="methods.html#decision-tree">More →</a></p>
-        </section>
+                <h3>Gaussian Naive Bayes</h3>
+                <p>Picks the income tier that makes a spending pattern most likely. For each tier, it
+                    models every feature as a bell curve (Gaussian) using that tier's mean and
+                    variance, then combines the 10 features with Bayes' rule, assuming they are
+                    independent. Implemented with <code>fit()</code>, <code>log_likelihood()</code>
+                    and <code>predict()</code>. <a href="methods.html#naive-bayes">More →</a></p>
 
-        <!-- 5. Experimental setup -->
-        <section id="setup">
-            <h2>Experimental Setup</h2>
+                <h3>K-Nearest Neighbors</h3>
+                <p>Picks the income tier shared by the most similar training rows. For each test row,
+                    it measures Minkowski distance across all 10 features, finds the <code>k</code>
+                    closest training rows, and takes a majority vote with nearest-neighbor
+                    tie-breaking. Implemented with <code>minkowski()</code>, <code>voting()</code>,
+                    <code>train_knn()</code> and <code>predict_knn()</code>. <a href="methods.html#knn">More →</a>
+                </p>
 
-            <h3>Data split</h3>
-            <p>The data is split <strong>by area</strong>, not by row, so all 10 rows of an area
-                are on the same side and no area is in both sets. 70% of the areas are used for
-                training and 30% for testing, chosen at random with a fixed seed (42), so every
-                method uses exactly the same rows.</p>
-            <ul>
-                <li><strong>Training set:</strong> 83 areas, 830 rows</li>
-                <li><strong>Test set:</strong> 35 areas, 350 rows</li>
-            </ul>
-            <p><a href="pipeline.html#split">In depth →</a></p>
+                <h3>C4.5 Decision Tree</h3>
+                <p>TODO: short explanation <a href="methods.html#decision-tree">More →</a></p>
+            </section>
 
-            <h3>Hyperparameters</h3>
-            <table>
-                <thead>
-                    <tr><th>Method</th><th>Hyperparameters</th></tr>
-                </thead>
-                <tbody>
-                    <tr><td>Gaussian Naive Bayes</td><td><code>var_smoothing = 1e-9</code></td></tr>
-                    <tr><td>K-Nearest Neighbors</td><td><code>k = 5</code>, <code>p = 2</code></td></tr>
-                    <tr><td>C4.5 Decision Tree</td><td><code>max_depth = 10</code>, <code>min_samples = 10</code></td></tr>
-                </tbody>
-            </table>
-            <p><a href="pipeline.html#training">In depth →</a></p>
+            <!-- 5. Experimental setup -->
+            <section id="setup">
+                <h2>Experimental Setup</h2>
 
-            <h3>Metrics</h3>
-            <p>Accuracy, plus precision, recall and F1 for each income tier, combined into one
-                score per model with a weighted mean (weighted by the number of test rows in each
-                tier). All metrics are implemented from scratch.
-                <a href="metrics.html">More →</a></p>
-        </section>
+                <h3>Data split</h3>
+                <p>The data is split <strong>by area</strong>, not by row, so all 10 rows of an area
+                    are on the same side and no area is in both sets. 70% of the areas are used for
+                    training and 30% for testing, chosen at random with a fixed seed (42), so every
+                    method uses exactly the same rows.</p>
+                <ul>
+                    <li><strong>Training set:</strong> 83 areas, 830 rows</li>
+                    <li><strong>Test set:</strong> 35 areas, 350 rows</li>
+                </ul>
+                <p><a href="pipeline.html#split">In depth →</a></p>
 
-        <!-- 6. Results -->
-        <section id="results">
-            <h2>Results</h2>
-            <p>TODO: comparison table and figures</p>
-            <p><a href="pipeline.html#evaluation">In depth →</a></p>
-        </section>
+                <h3>Hyperparameters</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Method</th>
+                            <th>Hyperparameters</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Gaussian Naive Bayes</td>
+                            <td><code>var_smoothing = 1e-9</code></td>
+                        </tr>
+                        <tr>
+                            <td>K-Nearest Neighbors</td>
+                            <td><code>k = 5</code>, <code>p = 2</code></td>
+                        </tr>
+                        <tr>
+                            <td>C4.5 Decision Tree</td>
+                            <td><code>max_depth = 10</code>, <code>min_samples = 10</code></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p><a href="pipeline.html#training">In depth →</a></p>
 
-        <!-- 7. Discussion -->
-        <section id="discussion">
-            <h2>Discussion</h2>
-            <p>TODO: why the methods performed as they did, limitations, possible improvements</p>
-        </section>
+                <h3>Metrics</h3>
+                <p>Accuracy, plus precision, recall and F1 for each income tier, combined into one
+                    score per model with a weighted mean (weighted by the number of test rows in each
+                    tier). All metrics are implemented from scratch.
+                    <a href="metrics.html">More →</a>
+                </p>
+            </section>
 
-        <!-- 8. Conclusion -->
-        <section id="conclusion">
-            <h2>Conclusion</h2>
-            <p>TODO</p>
-        </section>
+            <!-- 6. Results -->
+            <section id="results">
+                <h2>Results</h2>
+                <p>TODO: comparison table and figures</p>
+                <p><a href="pipeline.html#evaluation">In depth →</a></p>
+            </section>
 
-        <!-- 9. References -->
-        <section id="references">
-            <h2>References</h2>
-            <p>TODO</p>
-        </section>
+            <!-- 7. Discussion -->
+            <section id="discussion">
+                <h2>Discussion</h2>
+                <p>TODO: why the methods performed as they did, limitations, possible improvements</p>
+            </section>
 
-        <!-- 10. Links -->
-        <section id="links">
-            <h2>Links</h2>
-            <p>Repository: <a href="https://github.com/Shiiroi/cmsc-170-project">github.com/Shiiroi/cmsc-170-project</a></p>
-            <p>Presentation slides: TODO</p>
-        </section>
+            <!-- 8. Conclusion -->
+            <section id="conclusion">
+                <h2>Conclusion</h2>
+                <p>The experimental results show that Gaussian Naive Bayes achieved the highest performance at 68.57%
+                    accuracy (F1-score: 0.6878), followed by K-Nearest Neighbors at 65.43%, while the C4.5 Decision Tree
+                    scored lowest at 58.86%. These results confirm that proportional expenditure shares retain a
+                    recognizable socioeconomic signal across provinces under Engel's Law, even in the complete absence
+                    of nominal peso figures. However, an overall error rate between 31% and 41% indicates that
+                    macro-level provincial aggregation introduces significant class overlap between transitional deciles
+                    (Deciles 3 to 7), making standalone baseline models inadequate for high-stakes policy deployment.
+                </p>
+            </section>
+
+            <!-- 9. References -->
+            <section id="references">
+                <h2>References</h2>
+                <ul>
+                    <li>Albert, J. R. G., Santos, A. G. F., &amp; Vizmanos, J. F. V. (2020). <em>Poverty, the middle
+                            class, and income distribution: 2020 edition</em> (PIDS Discussion Paper Series No.
+                        2020-22). Philippine Institute for Development Studies. <a
+                            href="https://pidswebs.pids.gov.ph/CDN/PUBLICATIONS/pidsdps2022.pdf">https://pidswebs.pids.gov.ph/CDN/PUBLICATIONS/pidsdps2022.pdf</a>
+                    </li>
+                    <li>Apus, J. O., Mantalaba, K. D. V., Mackno, A. J. B., &amp; Bokingkito, P. B., Jr. (2023).
+                        Predicting the Filipino household income using Naive Bayes classification algorithm.
+                        <em>International Journal of Computing and Digital Systems</em>, 1–7. <a
+                            href="https://journal.uob.edu.bh/items/fcb57bc6-2b1e-44a5-93ee-58a62b0bf7d1">https://journal.uob.edu.bh/items/fcb57bc6-2b1e-44a5-93ee-58a62b0bf7d1</a>
+                    </li>
+                    <li>Celis, J. H. Q., &amp; Pagatpatan, A. C., Jr. (2019). Predicting the poverty alleviation in the
+                        province of Eastern Samar using data mining techniques. <em>International Journal of Recent
+                            Technology and Engineering</em>, <em>8</em>(3), 7140–7145. <a
+                            href="https://doi.org/10.35940/ijrte.C6082.098319">https://doi.org/10.35940/ijrte.C6082.098319</a>
+                    </li>
+                    <li>Philippine Statistics Authority. (2024). <em>Table 7. Total annual family expenditure by major
+                            expenditure group by per capita income decile and by region, province, and HUC: 2023</em>.
+                        PSA OpenSTAT. <a href="https://openstat.psa.gov.ph/">https://openstat.psa.gov.ph/</a></li>
+                    <li>Deaton, A., &amp; Zaidi, S. (2002). <em>Guidelines for constructing consumption aggregates for
+                            welfare analysis</em> (LSMS Working Paper No. 135). The World Bank. <a
+                            href="https://doi.org/10.1596/0-8213-4990-2">https://doi.org/10.1596/0-8213-4990-2</a>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- 10. Links -->
+            <section id="links">
+                <h2>Links</h2>
+                <p>Repository: <a
+                        href="https://github.com/Shiiroi/cmsc-170-project">github.com/Shiiroi/cmsc-170-project</a></p>
+                <p>Presentation slides: TODO</p>
+            </section>
     </main>
 
     <footer class="site-footer">
         <p>CMSC 170 Project</p>
     </footer>
 </body>
+
 </html>
