@@ -283,11 +283,57 @@ for l in labels:
         <section id="decision-tree">
             <h2>C4.5 Decision Tree</h2>
             <h3>Idea</h3>
-            <p>TODO</p>
+            <p>
+                A decision tree <em>classifies information through splitting data based on its feature values to create a tree-like structure of decisions</em>,
+                from the root node all the way to a leaf at a specified depth. Each leaf node represents a predicted income tier.
+            </p>
             <h3>How it works</h3>
-            <p>TODO</p>
+            <p>
+                The C4.5 Decision Tree builds itself through:
+                <p>
+                <b>Step 1 - Initializing the Root Node:</b>
+                The root node here represents the whole dataset.
+                </p>
+                <p>
+                <b>Step 2 - Calculating the Entropy:</b>
+                Entropy for a decision tree measures the amount of randomness or the "impurity" in a dataset.
+                It is computed with the following formula: <code>H(Dataset) = -Σpᵢlog₂(pᵢ)</code>
+                </p>
+                <p>
+                <b>Step 3 - Calculating the Information Gain:</b>
+                Information is calculated for each attribute to measure how much entropy decreases for each split.
+                It is computed with the following formula: <code>Information Gain = H(D) - ∑(|Dv|/|D|) · H(Dv)</code>
+                    <p>
+                        Where <code>D</code> is the dataset, <code>Dv</code> is the subset v of the dataset, <code>|Dv|</code> is the number of samples in subset v, and <code>|D|</code> is the total number of samples in the dataset.
+                    </p>
+                </p>
+                <p>
+                <b>Step 4 - Calculating Split Information:</b>
+                Split Information measures how the dataset is distributed after splitting.
+                It is computed with the following formula: <code>Split Information = −Σ(|Dv|/|D|) · log₂(|Dv|/|D|)</code>
+                </p>
+                <p>
+                <b>Step 5 - Calculating the Gain Ratio:</b>
+                The Gain Ratio is used to normalize Information Gain to avoid bias towards attributes with many distinct values.
+                It is computed with the following formula: <code>Gain Ratio = Information Gain / Split Information</code>
+                </p>
+                <p>
+                <b>Step 6 - Selecting the Best Attribute and Split:</b>
+                The attribute with the highest gain ratio and the dataset is then divided into subsets based on its values.
+                </p>
+                <b>Step 7 - Repeat recursively:</b>
+                Continue the process until the nodes become "pure" (<code>Entropy = 0</code>) or no attributes remain.
+                </p>
+            </p>
             <h3>How we implemented it</h3>
-            <p>TODO</p>
+            <p>
+               <p>
+                    <code>train_dt()</code> initializes a <code>C45DecisionTree</code> class (representing the root node) based on the given parameters <code>X_train, y_train, features, min_samples, max_depth</code> before calling <code>def fit()</code> to start the recursive process.
+               </p>
+               <p>
+                    <code>def best_threshold()</code> returns the best attribute to split on along with calculating the Information Gain, the Split, and the Ratio given the entropy from <code>def entropy()</code>.
+               </p>
+            </p>
             <h3>Results on the test set</h3>
             <p>TODO</p>
             <h3>Notes and references</h3>
