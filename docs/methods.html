@@ -335,9 +335,59 @@ for l in labels:
                </p>
             </p>
             <h3>Results on the test set</h3>
-            <p>TODO</p>
+            <p>Accuracy: <strong>58.86%</strong></p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Income tier</th>
+                        <th>Precision</th>
+                        <th>Recall</th>
+                        <th>F1</th>
+                        <th>Test rows</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Low</td>
+                        <td>0.7273</td>
+                        <td>0.2286</td>
+                        <td>0.3478</td>
+                        <td>105</td>
+                    </tr>
+                    <tr>
+                        <td>Middle</td>
+                        <td>0.4920</td>
+                        <td>0.8786</td>
+                        <td>0.6308</td>
+                        <td>140</td>
+                    </tr>
+                    <tr>
+                        <td>High</td>
+                        <td>0.8806</td>
+                        <td>0.5619</td>
+                        <td>0.6860</td>
+                        <td>105</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Weighted mean</strong></td>
+                        <td>0.6792</td>
+                        <td>0.5886</td>
+                        <td>0.5625</td>
+                        <td>350</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>C4.5 does best on the High tier (F1 0.69, precision 0.88). Middle has the highest recall
+                (0.88) but the lowest precision (0.49), because the tree routes most Low rows
+                (81 of 105) and nearly half of High rows (46 of 105) into Middle, leaving Low with
+                a recall of 0.23.</p>
             <h3>Notes and references</h3>
-            <p>TODO</p>
+            <p>
+            <ul>
+                <li>Our version of the C4.5 Decision Tree only does pre-pruning via setting the <code>min_samples</code>
+                and <code>max_depth</code> parameters to simplify the process.</li>
+            </ul>
+            </p>
         </section>
     </main>
 
