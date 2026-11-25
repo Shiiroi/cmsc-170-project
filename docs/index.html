@@ -306,7 +306,32 @@
             <!-- 7. Discussion -->
             <section id="discussion">
                 <h2><span class="heading-icon" aria-hidden="true"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" /></svg></span>Discussion</h2>
-                <p>TODO: why the methods performed as they did, limitations, possible improvements</p>
+                <h3>Model Performance</h3>
+                <ul>
+                    <li><strong>Gaussian Naive Bayes (68.57%):</strong> Outperformed other models because
+                        macro-level spending shares follow smooth, continuous shifts under Engel's Law (e.g., food
+                        shares steadily decreasing as income rises). Parametric Gaussian distributions effectively
+                        filtered provincial noise, and Naive Bayes remained resilient despite feature correlation from
+                        budget percentages summing to 100%.</li>
+                    <li><strong>K-Nearest Neighbors (65.43%):</strong> Minkowski distance was dominated by
+                        high-variance categories like food and housing, while lower-percentage categories (education,
+                        recreation) had minimal influence. Spatial price disparities also caused overlap, as
+                        middle-income urban deciles often mirrored low-income rural deciles in spending proportions.</li>
+                    <li><strong>C4.5 Decision Tree (58.86%):</strong> Axis-aligned splits struggle with trade-offs
+                        across multiple interdependent budget categories. Isolating one feature at a time led to
+                        fragmented trees and poorer generalization across unseen provinces.</li>
+                    <li><strong>Transitional Overlap:</strong> Errors concentrated along boundary deciles (Deciles
+                        3–4 and 7–8), where gradual shifts from subsistence goods to discretionary spending blur tier
+                        separations.</li>
+                </ul>
+
+                <h3>Limitations</h3>
+                <ul>
+                    <li><strong>Cost-of-Living Confounding:</strong> Higher housing shares often reflect steep urban
+                        living costs rather than greater household affluence.</li>
+                    <li><strong>Hard Discretization:</strong> Grouping continuous deciles into three discrete tiers
+                        penalizes near-boundary borderline errors as full misclassifications.</li>
+                </ul>
             </section>
 
             <!-- 8. Conclusion -->
